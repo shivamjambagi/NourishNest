@@ -1,0 +1,4369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NourishNest | Nourishment You Can Trust</title>
+
+  <!-- =================== BASE STYLES =================== -->
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Georgia',serif;color:#3b2f1e;background:#f8f2e1;overflow-x:hidden}
+
+    /* Navbar */
+    header.navbar{width:100%;padding:2rem 6%;position:fixed;top:0;left:0;display:flex;justify-content:center;align-items:center;background:rgba(255,255,255,0);backdrop-filter:blur(4px);z-index:10;transition:all .3s ease}
+    header.navbar.scrolled{background:#fff;box-shadow:0 2px 15px rgba(0,0,0,.05);padding:1rem 6%}
+    .nav-container{width:100%;max-width:1300px;display:flex;justify-content:space-between;align-items:center;position:relative}
+    .nav-links{list-style:none;display:flex;gap:3rem;position:absolute;left:50%;transform:translateX(-50%)}
+    .nav-links a{text-decoration:none;color:#2b261b;font-size:1.1rem;font-weight:600;position:relative;letter-spacing:.2px;transition:all .25s ease}
+    .nav-links a::after{content:'';position:absolute;width:0;height:2px;bottom:-6px;left:0;background:#4E5C36;transition:width .25s ease}
+    .nav-links a:hover::after{width:100%}
+    .nav-buttons{margin-left:auto;display:flex;align-items:center;gap:1rem}
+    .login{color:#2b261b;text-decoration:none;font-size:1rem;transition:color .25s}
+    .login:hover{color:#4E5C36}
+    .btn-primary{background:#4E5C36;color:#fff;padding:.75rem 1.35rem;border-radius:40px;font-weight:800;text-decoration:none;font-size:1rem;letter-spacing:.2px;transition:transform .25s,background-color .25s}
+    .btn-primary:hover{background:#3d4b2c;transform:translateY(-3px)}
+
+    /* Hero */
+    .hero{height:100vh;position:relative;display:flex;justify-content:center;align-items:center;text-align:center;overflow:hidden}
+    .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:brightness(.9)}
+    .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.15));z-index:-1}
+    .particle{position:absolute;width:10px;height:10px;background:rgba(78,92,54,.3);border-radius:50%;animation:float 12s infinite ease-in-out}
+    @keyframes float{0%{transform:translateY(0) translateX(0) scale(1);opacity:.6}50%{transform:translateY(-40px) translateX(20px) scale(1.1);opacity:.8}100%{transform:translateY(0) translateX(0) scale(1);opacity:.6}}
+
+    /* Featured (keep) */
+    .featured-food{background:#f8f2e1;padding:8rem 10%;display:flex;justify-content:space-between;align-items:center;gap:4rem;flex-wrap:wrap;border-top:2px solid #e6dcc1}
+    .featured-text{flex:1;min-width:300px}
+    .featured-text h2{font-size:3rem;color:#3b2f1e;margin-bottom:1rem}
+    .featured-text p{font-size:1.1rem;color:#5a4d3b;margin-bottom:2rem}
+    .featured-slideshow{flex:1;position:relative;max-width:600px;margin:0 auto}
+    .featured-slideshow img{position:absolute;top:0;left:0;width:100%;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,.1);opacity:0;transition:opacity .8s ease-in-out}
+    .featured-slideshow img.active{opacity:1;position:relative}
+
+    /* ======= About (Upgraded) ======= */
+    .about{position:relative;background:linear-gradient(180deg,#fffaf0 0%,#f4f1e4 100%);padding:10rem 10% 8rem;overflow:hidden;border-top:2px solid #e6dcc1}
+    .about-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .floating-leaf{position:absolute;width:60px;height:60px;background:url('https://cdn-icons-png.flaticon.com/512/415/415733.png') no-repeat center/contain;top:var(--y);left:var(--x);opacity:.14;animation:leafFloat 14s ease-in-out infinite;animation-delay:var(--delay)}
+    @keyframes leafFloat{0%{transform:translateY(0) rotate(0);opacity:.25}50%{transform:translateY(-40px) rotate(10deg);opacity:.4}100%{transform:translateY(0) rotate(0);opacity:.25}}
+    .about-container{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:3.2rem;position:relative;z-index:2}
+    @media(max-width:980px){.about-container{grid-template-columns:1fr}}
+    .about-image img{width:100%;max-width:640px;height:auto;border-radius:28px;box-shadow:0 24px 44px rgba(0,0,0,.12);transition:transform .5s ease}
+    .about-image img:hover{transform:scale(1.03)}
+    .about-text h2{font-size:3rem;color:#3b2f1e;margin-bottom:1rem;position:relative}
+    .about-text h2 span{color:#4E5C36}
+    .about-text h2::after{content:"";display:block;width:90px;height:4px;background:#4E5C36;margin-top:.6rem;border-radius:3px}
+    .about-text p{font-size:1.12rem;line-height:1.9;color:#4b4030;margin-bottom:1.6rem}
+    .about-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-top:1.2rem}
+    .about-stat{background:#fff;border:1px solid #e5dec9;border-radius:16px;padding:1rem 1.2rem;box-shadow:0 8px 22px rgba(0,0,0,.06);text-align:center}
+    .about-stat strong{display:block;font-size:1.6rem;color:#4E5C36}
+    .join-nest{background:#f0f6e8;padding:2rem;border-radius:18px;box-shadow:0 10px 24px rgba(0,0,0,.08);text-align:left;margin-top:1rem}
+
+    /* ======= Gallery (Upgraded) ======= */
+    .food-gallery{background:#fffaf0;padding:8rem 10%;text-align:center;border-top:2px solid #e6dcc1}
+    .gallery-title{font-size:3rem; color:#3b2f1e; margin-bottom:.4rem; letter-spacing:.4px;}
+    .gallery-head{max-width:900px; margin:0 auto 2.2rem; color:#5a4d3b;}
+    .food-header{display:flex;justify-content:center;gap:1rem;margin:1.3rem auto 3rem;flex-wrap:wrap}
+    .food-header input,.food-header select{padding:.85rem 1rem;border-radius:30px;border:1px solid #cfc8b3;font-size:1rem;font-family:'Georgia',serif;outline:none;background:#f5f1e4;transition:box-shadow .25s ease}
+    .food-header input:focus,.food-header select:focus{box-shadow:0 0 10px rgba(78,92,54,.25)}
+    .food-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2.2rem;justify-items:center}
+    .food-card{position:relative; padding:0; width:100%; overflow:hidden; border-radius:22px; background:#fff; box-shadow:0 14px 30px rgba(0,0,0,.08); transition:transform .25s ease, box-shadow .25s ease}
+    .food-card:hover{transform:translateY(-4px); box-shadow:0 18px 40px rgba(0,0,0,.12)}
+    .food-card img{display:block; width:100%; height:200px; object-fit:cover; border-radius:22px 22px 0 0; margin:0; transition:transform .5s ease}
+    .food-card:hover img{ transform:scale(1.05); }
+    .food-chip{position:absolute; top:12px; left:12px; background:#4E5C36; color:#fff; padding:.35rem .7rem; border-radius:999px; font-weight:700; font-size:.8rem; box-shadow:0 6px 14px rgba(0,0,0,.12)}
+    .food-body{ padding:1rem 1.1rem 1.2rem; text-align:left;}
+    .food-card h4{font-size:1.2rem;margin-bottom:.3rem}
+    .food-card .tag{display:inline-block;background:#f0f6e8;color:#3b2f1e;font-size:.85rem;padding:.35rem .7rem;border-radius:999px}
+
+    /* ======= Testimonials (Upgraded) ======= */
+    .testimonials{background:radial-gradient(1200px 500px at 10% 0%, #fffaf0 0%, #f8f2e1 40%, #f6edd6 100%);position:relative;padding:7rem 10%;text-align:center;border-top:2px solid #e6dcc1}
+    .testimonials-title{font-size:3rem; letter-spacing:.3px; color:#3b2f1e;}
+    .testimonials-subtitle{max-width:760px; margin:0 auto 2.6rem; color:#5c4d39}
+    .testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2.5rem}
+    .testimonial-card{position:relative; overflow:hidden; text-align:left; border-radius:22px; background:#fff; box-shadow:0 16px 36px rgba(0,0,0,.08); padding:1.6rem}
+    .t-head{display:flex; align-items:center; gap:.9rem; margin-bottom:1rem;}
+    .avatar{width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,#e9ecd9,#c7d8a0); display:grid; place-items:center; font-weight:700; color:#3b2f1e;}
+    .stars{font-size:1rem; color:#f1b400; letter-spacing:2px;}
+    .quote-mark{position:absolute; right:-10px; top:-10px; font-size:5rem; color:#f0f0e6; pointer-events:none;}
+    .testimonial-text{font-size:1.08rem; line-height:1.8; color:#3b2f1e; margin-bottom:1rem; font-style:italic}
+    .testimonial-name{font-size:1.1rem;font-weight:800;color:#4E5C36}
+    .testimonial-tag{font-size:.85rem;background:#f0f6e8;color:#3b2f1e;padding:.35rem .7rem;border-radius:999px;display:inline-block;margin-top:.4rem}
+
+    /* ======= Plans (Upgraded) ======= */
+    .pricing-section{background:#fffaf0;padding:8rem 10%;text-align:center;border-top:2px solid #e6dcc1}
+    .pricing-header h2{font-size:3rem;color:#3b2f1e;margin-bottom:.6rem}
+    .pricing-header p{color:#6d5f47;font-size:1.1rem;margin-bottom:1.6rem}
+    .plan-toggle{display:inline-flex;gap:.4rem;background:#efe9d4;border-radius:999px;padding:.35rem; margin-bottom:2rem; border:1px solid #e1d9c3}
+    .plan-toggle button{border:none;background:transparent;padding:.55rem 1.1rem;border-radius:999px;cursor:pointer;font-weight:800;color:#3b2f1e}
+    .plan-toggle button.active{background:#4E5C36;color:#fff}
+    .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem}
+    .pricing-card{background:#fff;border:1px solid #e6dcc1;padding:2rem;border-radius:24px;box-shadow:0 10px 26px rgba(0,0,0,.06);transition:.3s;position:relative;overflow:hidden;text-align:left}
+    .pricing-card:hover{transform:translateY(-6px);box-shadow:0 18px 36px rgba(0,0,0,.12)}
+    .pricing-card h3{font-size:1.6rem;color:#3b2f1e;margin-bottom:.3rem}
+    .pricing-card .price{margin:.4rem 0 1rem;color:#4E5C36}
+    .pricing-card .price span{font-size:2.6rem;line-height:1;font-weight:800}
+    .pricing-card ul{list-style:none;display:grid;gap:.4rem;margin:1rem 0 1.3rem;color:#4b4030}
+    .pricing-btn{display:inline-block;background:#4E5C36;color:#fff;border-radius:40px;padding:.9rem 1.1rem;font-weight:800;text-decoration:none;transition:.25s}
+    .pricing-btn:hover{transform:translateY(-2px);background:#3d4b2c}
+    .featured-plan{background:#f6fbef;border:2px solid #4E5C36}
+    .pricing-card .badge{position:absolute;top:12px;right:12px;background:#4E5C36;color:#fff;font-weight:800;border-radius:999px;padding:.35rem .7rem;font-size:.8rem}
+
+    /* Why choose us (unchanged) */
+    .why-choose-us{background:#fffaf0;padding:7rem 10%;text-align:center;border-top:2px solid #e6dcc1}
+    .wcu-title{font-size:2.8rem;color:#3b2f1e;margin-bottom:.6rem}
+    .wcu-subtitle{font-size:1.15rem;color:#5c4d3b;margin-bottom:4rem}
+    .wcu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2.5rem}
+    .wcu-card{background:#f8f2e1;padding:2.4rem;border-radius:25px;box-shadow:0 8px 22px rgba(0,0,0,.08);transition:.3s ease;text-align:center}
+    .wcu-card:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(0,0,0,.12)}
+    .wcu-icon{font-size:2.6rem;margin-bottom:1rem}
+    .wcu-card h3{font-size:1.4rem;color:#3b2f1e;margin-bottom:.7rem}
+    .wcu-card p{color:#4b4030;font-size:1rem;line-height:1.6}
+
+    /* Footer */
+    .footer{background:#4E5C36;color:#f8f2e1;padding:4rem 10%;margin-top:4rem}
+    .footer-container{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2rem}
+    .footer-about,.footer-links,.footer-contact{flex:1;min-width:200px}
+    .footer h3{font-size:1.8rem;margin-bottom:1rem}
+    .footer h4{font-size:1.3rem;margin-bottom:.8rem}
+    .footer p,.footer li,.footer a{font-size:1rem;color:#f8f2e1;text-decoration:none;margin-bottom:.5rem;transition:color .25s}
+    .footer a:hover{color:#d3e1b8}
+    .footer-links ul{list-style:none;padding:0}
+    .footer-links li{margin-bottom:.5rem}
+    .socials a{display:inline-block;margin-right:1rem;font-weight:bold;padding:.4rem .8rem;border-radius:6px;background:rgba(255,255,255,.1);transition:background .25s}
+    .socials a:hover{background:rgba(255,255,255,.2)}
+    .footer-bottom{text-align:center;margin-top:2rem;font-size:.9rem;border-top:1px solid rgba(255,255,255,.3);padding-top:1rem}
+
+    @media(max-width:768px){
+      .footer-container{flex-direction:column;gap:3rem}
+      .about-container{grid-template-columns:1fr}
+      .featured-food{flex-direction:column}
+    }
+
+    /* Login page route */
+    body.route-login main{display:none}
+    body.route-login #loginPage{display:grid}
+
+    /* Login page styles (Upgraded) */
+    #loginPage{display:none;min-height:100vh;place-items:center;padding:7rem 1rem 3rem;background:linear-gradient(120deg,#e9ecd9,#fffaf0,#f8f2e1)}
+    .login-wrap{width:min(1020px,94vw);display:grid;grid-template-columns:1.05fr .95fr;gap:2rem;align-items:stretch}
+    .login-card,.login-aside{background:#ffffff50;border-radius:22px;box-shadow:0 14px 32px rgba(0,0,0,.09)}
+    .login-card{padding:2rem;display:grid;gap:1rem;border:1px solid #025008}
+    .login-title{font-size:2rem;color:#3b2f1e;margin-bottom:.3rem}
+    .login-sub{color:#5a4d3b;margin-bottom:.6rem}
+    .input{width:100%;padding:.9rem 1rem;border-radius:14px;border:1px solid #d6cfbd;background:#fffef9;font-family:Georgia,serif}
+    .btn-row{display:flex;gap:.6rem;flex-wrap:wrap}
+    .btn{border:none;cursor:pointer;font-weight:800;padding:.9rem 1.1rem;border-radius:999px}
+    .btn-primary{background:#000000;color:#fff}
+    .btn-ghost{background:#fff;color:#3b2f1e;border:1px solid #cfc7ae}
+    .helper{color:#6b5b3e;font-size:.9rem}
+    .login-aside{padding:0; position:relative; overflow:hidden; display:grid; grid-template-rows:auto 1fr auto; background:linear-gradient(165deg,#f0f6e8 0%,#fff 50%,#f8f2e1 100%)}
+    .aside-hero{height:220px;background:url('NourishNest/Below_Homepage.png') center/cover no-repeat; filter:saturate(1.1) contrast(1.05)}
+    .aside-content{padding:1.6rem}
+    .aside-badge{display:inline-block;background:#4E5C36;color:#fff;padding:.35rem .7rem;border-radius:999px;font-weight:800;margin-bottom:.6rem}
+    .aside-title{font-size:1.5rem;color:#3b2f1e;margin-bottom:.5rem}
+    .aside-list{color:#4b4030;display:grid;gap:.35rem;margin-top:.6rem}
+    .aside-leaf{position:absolute;width:120px;height:120px;inset:auto -40px -40px auto;background:url('https://cdn-icons-png.flaticon.com/512/415/415733.png') center/contain no-repeat;opacity:.12;transform:rotate(-20deg)}
+    .login-brand{display:flex;align-items:center;gap:.6rem;color:#3b2f1e;font-weight:800;padding:1rem 1.6rem}
+
+    /* Toast */
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:#3b2f1e;color:#fff;padding:.6rem 1rem;border-radius:999px;font-weight:800;opacity:0;transition:.25s;z-index:2000}
+    .toast.show{opacity:1;transform:translate(-50%,-6px)}
+
+    /* Animations & polish */
+    section { scroll-margin-top: 90px; }
+    .pricing-card, .food-card, .wcu-card { transition: transform .3s ease, box-shadow .3s ease; }
+    .pricing-card:hover, .food-card:hover, .wcu-card:hover { transform: translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,.12); }
+    section { opacity:0; transform: translateY(20px); animation: fadeUp 0.8s ease forwards; }
+    @keyframes fadeUp { to {opacity:1; transform:translateY(0);} }
+    button, .btn-primary, .pricing-btn { transition:background .3s, transform .3s; }
+    button:hover, .btn-primary:hover, .pricing-btn:hover { transform: translateY(-3px); }
+
+    /* ===== Cart drawer & toggle ===== */
+    #cartDrawer {
+      position: fixed; top:0; right:-420px; width:380px; height:100vh;
+      background:#fffaf0; box-shadow:-4px 0 20px rgba(0,0,0,0.12);
+      transition: right .3s ease; z-index:9999; padding:1.6rem 1.2rem; display:flex; flex-direction:column;
+      border-left:1px solid #e5dcc5;
+    }
+    #cartDrawer.open { right:0; }
+    #cartHeader { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; }
+    #cartList { flex:1; overflow-y:auto; padding-right:.3rem; }
+    .cart-row { display:flex; align-items:center; justify-content:space-between; gap:.8rem; padding:.7rem .2rem; border-bottom:1px dashed #d8ceb4; }
+    .cart-title { font-weight:800; color:#3b2f1e; }
+    .qty-wrap { display:flex; align-items:center; gap:.4rem; }
+    .qty-btn { width:28px; height:28px; border-radius:7px; border:1px solid #cbbf9f; background:#fff; cursor:pointer; }
+    .remove-btn { background:#d9534f; color:#fff; border:none; padding:.35rem .55rem; border-radius:7px; cursor:pointer; }
+    #cartFooter { border-top:1px solid #ccbfa5; padding-top:.8rem; }
+    #cartToggle {
+      position:fixed; bottom:30px; right:30px; z-index:9998;
+      background:#4E5C36; color:#fff; padding:1rem 1.3rem;
+      border:none; border-radius:50px; font-size:1rem; cursor:pointer;
+      box-shadow:0 6px 18px rgba(0,0,0,0.2); display:none;
+    }
+    #emptyMsg { text-align:center; color:#6b5b3e; padding:1.2rem .4rem; }
+
+    /* Lock gallery until plan purchased */
+.gallery-locked .food-card img {
+  filter: blur(5px) brightness(0.8);
+  pointer-events: none;
+}
+.gallery-locked .food-card::after {
+  content: "🔒 Subscribe to unlock full menu";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(78,92,54,0.9);
+  color: #fff;
+  padding: .6rem;
+  font-size: .9rem;
+  text-align: center;
+}
+.view-all.locked a {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.nav-links a.active {
+  color: #4E5C36;
+}
+
+.nav-links a.active::after {
+  width: 100%;
+}
+
+/* FAQ Section */
+#faq {
+  position: relative;
+  background: #fffaf0;
+  padding: 8rem 10% 6rem;
+  overflow: hidden;
+}
+
+/* Cartoon background behind text */
+#faq::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 5%; /* move if you want left side */
+  width: 480px;
+  height: 480px;
+  background: url("https://i.postimg.cc/VsbKKN6J/Man-Confused.png") no-repeat;
+  background-size: contain;
+  opacity: 0.07; /* subtle & elegant */
+  pointer-events: none;
+  transform: translateY(10%);
+}
+
+/* Ensure text sits above image */
+#faq * {
+  position: relative;
+  z-index: 2;
+}
+
+/* FAQ title styling upgrade */
+#faq h2 {
+  font-size: 3rem;
+  color: #3b2f1e;
+  margin-bottom: .4rem;
+  text-align: center;
+  font-weight: 800;
+}
+
+#faq p.faq-sub {
+  text-align: center;
+  color: #6d5f47;
+  font-size: 1.08rem;
+  margin-bottom: 3rem;
+}
+
+/* Accordion styles (you already have similar; this refinines it) */
+.faq-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.3rem 1.6rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.faq-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.09);
+}
+
+.faq-question {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #3b2f1e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-answer {
+  display: none;
+  margin-top: .8rem;
+  font-size: 1rem;
+  color: #5a4d3b;
+  line-height: 1.6;
+}
+
+.faq-item.open .faq-answer {
+  display: block;
+}
+
+
+
+/* ===== Explore (Cinematic) ===== */
+.xpl{position:relative;background:#fffaf0;border-top:2px solid #e6dcc1;min-height:100vh}
+.xpl-rail{position:sticky;top:110px;left:0;height:calc(100vh - 140px);display:flex;gap:.9rem;align-items:center;padding-left:2%;z-index:2}
+@media(max-width:900px){.xpl-rail{display:none}}
+.xpl-rail-track{width:6px;height:72%;background:#e7eed6;border-radius:999px;position:relative;box-shadow:inset 0 0 0 1px #dfe9c7}
+.xpl-rail-fill{position:absolute;bottom:0;left:0;width:100%;height:0;background:#4E5C36;border-radius:999px;box-shadow:0 8px 18px rgba(78,92,54,.25)}
+.xpl-rail-steps{list-style:none;color:#6a5b42;font-weight:700;line-height:1.8}
+.xpl-rail-steps li{opacity:.55}
+.xpl-rail-steps li.is-active{opacity:1;color:#3b2f1e}
+
+/* Stage & Scenes */
+.xpl-stage{position:relative}
+.xpl-scene{position:relative;min-height:100vh;display:grid;place-items:center}
+.xpl-scene .xpl-bg{position:absolute;inset:-10%;z-index:0;filter:blur(40px);opacity:.5;transform:scale(1);transition:transform .7s ease, opacity .7s ease}
+.xpl-scene[data-theme="green"] .xpl-bg{background:radial-gradient(600px 300px at 20% 20%, #dff1d1, transparent 60%), radial-gradient(600px 300px at 80% 80%, #f0f7e8, transparent 60%)}
+.xpl-scene[data-theme="protein"] .xpl-bg{background:radial-gradient(600px 300px at 20% 20%, #f6f0d7, transparent 60%), radial-gradient(600px 300px at 80% 80%, #fff2cc, transparent 60%)}
+.xpl-scene[data-theme="fresh"] .xpl-bg{background:radial-gradient(600px 300px at 20% 20%, #d9f6ff, transparent 60%), radial-gradient(600px 300px at 80% 80%, #eafaff, transparent 60%)}
+.xpl-scene[data-theme="wholegrain"] .xpl-bg{background:radial-gradient(600px 300px at 20% 20%, #f6ead9, transparent 60%), radial-gradient(600px 300px at 80% 80%, #fff5e8, transparent 60%)}
+.xpl-scene[data-theme="omega"] .xpl-bg{background:radial-gradient(600px 300px at 20% 20%, #e0f0ff, transparent 60%), radial-gradient(600px 300px at 80% 80%, #edf7ff, transparent 60%)}
+
+/* Content */
+.xpl-content{position:relative;z-index:1;display:grid;gap:1.2rem;justify-items:center;text-align:center;padding:6rem 10%}
+.xpl-header h2{font-size:3rem;color:#3b2f1e;letter-spacing:.2px}
+.xpl-header h2 span{color:#4E5C36}
+.xpl-header p{max-width:760px;color:#5a4d3b}
+
+/* Plate */
+.xpl-plate{position:relative;display:grid;gap:.7rem}
+.xpl-img{width:min(920px,86vw);height:min(520px,56vw);object-fit:cover;border-radius:28px;box-shadow:0 24px 60px rgba(0,0,0,.16);transform:translateY(10px) scale(.98);opacity:0;transition:opacity .6s ease, transform .6s ease;will-change:transform}
+.xpl-img.loaded{opacity:1;transform:translateY(0) scale(1)}
+.xpl-caption{display:grid;gap:.4rem}
+.xpl-caption strong{font-size:1.3rem;color:#3b2f1e}
+.xpl-chips{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center}
+.xpl-chips em{font-style:normal;background:#f0f6e8;color:#3b2f1e;border:1px solid #dbe7cc;border-radius:999px;padding:.35rem .7rem;font-weight:800;font-size:.9rem;box-shadow:0 6px 16px rgba(0,0,0,.06);transform:translateY(8px);opacity:0;transition:transform .5s .1s ease, opacity .5s .1s ease}
+.xpl-scene.is-inview .xpl-chips em{transform:translateY(0);opacity:1}
+
+/* CTA */
+.xpl-cta{margin-top:.4rem}
+.xpl-btn{display:inline-block;background:#4E5C36;color:#fff;text-decoration:none;border:none;border-radius:40px;padding:.9rem 1.35rem;font-weight:800;letter-spacing:.2px;box-shadow:0 10px 24px rgba(78,92,54,.25);transition:.3s}
+.xpl-btn:hover{transform:translateY(-3px);background:#3d4b2c}
+.xpl-ghost{background:#fff;color:#3b2f1e;border:1px solid #cfe2b6;box-shadow:none}
+.xpl-ghost:hover{background:#f6fbef}
+
+/* Scene entrance */
+.xpl-scene .xpl-header{opacity:0;transform:translateY(16px);transition:.6s ease}
+.xpl-scene.is-inview .xpl-header{opacity:1;transform:translateY(0)}
+.xpl-scene.is-inview .xpl-bg{opacity:.6;transform:scale(1.02)}
+
+/* Mobile tweaks */
+@media (max-width:740px){
+  .xpl-header h2{font-size:2.2rem}
+  .xpl-content{padding:4.5rem 6%}
+  .xpl-img{height:58vw;border-radius:22px}
+}
+
+/* Optional subtle mouse parallax on desktop */
+@media (hover:hover){
+  .xpl-plate:hover .xpl-img{transform:translateY(-2px) scale(1.01)}
+}
+#loginPage {
+  display: none;
+}
+#loginPage.active {
+  display: flex;
+}
+/* Hide login page by default */
+#loginPage {
+  display: none;
+}
+
+/* Show login only when router activates it */
+body.route-login #loginPage {
+  display: flex;
+}
+
+/* When login is shown, hide all other main site sections */
+body.route-login main,
+body.route-login header,
+body.route-login footer:not(.footer-login),
+body.route-login section:not(#loginPage) {
+  display: none !important;
+}
+
+
+  </style>
+</head>
+
+<body>
+  <!-- =================== NAVBAR =================== -->
+  <header class="navbar" id="navbar">
+    <nav class="nav-container">
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+    
+
+        <li><a href="#gallery">Resources</a></li>
+        <li><a href="#plans">Plans</a></li>
+        <li><a href="#contact-page">Contact</a></li>
+
+      </ul>
+      <div class="nav-buttons">
+        <a href="#login" class="login" id="loginCta">Login</a>
+        <a href="#plans" class="btn-primary">Get started</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =================== MAIN CONTENT =================== -->
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="home" aria-label="Hero">
+      <video autoplay muted playsinline class="hero-video" id="heroVideo">
+        <source src="C:\Users\Phoenix\Desktop\NourishNest\Pictures_For_Website\42ee3165-091e-42b5-6022-47f076e0b988.mp4" type="video/mp4">
+      </video>
+      <div class="overlay"></div>
+      <div class="particle" style="top:20%; left:15%; animation-delay:0s;"></div>
+      <div class="particle" style="top:60%; left:70%; animation-delay:3s;"></div>
+      <div class="particle" style="top:40%; left:50%; animation-delay:6s;"></div>
+    </section>
+
+    <!-- Featured -->
+   <!-- =================== EXPLORE OUR HEALTHY FOOD — CINEMATIC SHOWCASE =================== -->
+<section id="explore" class="xpl">
+  <!-- Progress Rail -->
+  <aside class="xpl-rail" aria-hidden="true">
+    <div class="xpl-rail-track">
+      <span class="xpl-rail-fill" id="xplRailFill"></span>
+    </div>
+    <ol class="xpl-rail-steps">
+      <li>Vegan Bowl</li>
+      <li>Grilled Chicken</li>
+      <li>Quinoa Salad</li>
+      <li>Avocado Toast</li>
+      <li>Salmon Plate</li>
+    </ol>
+  </aside>
+
+  <!-- Sticky Stage -->
+  <div class="xpl-stage" aria-label="Explore our healthy food">
+    <!-- Scene 1 -->
+    <article class="xpl-scene" data-scene="1" data-theme="green">
+      <div class="xpl-bg"></div>
+      <div class="xpl-content">
+        <header class="xpl-header">
+          <h2>Explore Our <span>Healthy Food</span></h2>
+          <p>Nourishing meals crafted by nutritionists — balanced, fresh, and full of flavour.</p>
+        </header>
+
+        <figure class="xpl-plate">
+          <img
+            class="xpl-img lazy"
+            data-src="https://i.postimg.cc/m2FscPq0/Vegan-Bowl-Showcase.jpg"
+            alt="Vegan Bowl — plant powered goodness" />
+          <figcaption class="xpl-caption">
+            <strong>Vegan Bowl</strong>
+            <span class="xpl-chips">
+              <em>🌱 Vegan</em><em>🧘 Balanced</em><em>⚡ Low GI</em>
+            </span>
+          </figcaption>
+        </figure>
+
+        <div class="xpl-cta">
+          <a href="#plans" class="xpl-btn">Build My Plan</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Scene 2 -->
+    <article class="xpl-scene" data-scene="2" data-theme="protein">
+      <div class="xpl-bg"></div>
+      <div class="xpl-content">
+        <header class="xpl-header">
+          <h2>High-Protein Power</h2>
+          <p>Lean, satisfying meals designed to support performance and recovery.</p>
+        </header>
+
+        <figure class="xpl-plate">
+          <img
+            class="xpl-img lazy"
+            data-src="https://i.postimg.cc/PxxGdJYR/Grilled-Chicken-Showcase.jpg"
+            alt="Grilled Chicken — high protein plate" />
+          <figcaption class="xpl-caption">
+            <strong>Grilled Chicken</strong>
+            <span class="xpl-chips">
+              <em>💪 High Protein</em><em>🥦 Macro Smart</em><em>🔥 2–3 min heat</em>
+            </span>
+          </figcaption>
+        </figure>
+
+        <div class="xpl-cta">
+          <a href="#gallery" class="xpl-btn xpl-ghost">Browse Dishes</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Scene 3 -->
+    <article class="xpl-scene" data-scene="3" data-theme="fresh">
+      <div class="xpl-bg"></div>
+      <div class="xpl-content">
+        <header class="xpl-header">
+          <h2>Fresh & Fibre-Rich</h2>
+          <p>Crisp textures, complete proteins, and all-day energy.</p>
+        </header>
+
+        <figure class="xpl-plate">
+          <img
+            class="xpl-img lazy"
+            data-src="https://i.postimg.cc/fRfTL3t1/Quinoa-Salad-9.jpg"
+            alt="Quinoa Salad — fibre rich and fresh" />
+          <figcaption class="xpl-caption">
+            <strong>Quinoa Salad</strong>
+            <span class="xpl-chips">
+              <em>🌾 Gluten-Free</em><em>🥗 Fresh Crunch</em><em>💧 Hydrating</em>
+            </span>
+          </figcaption>
+        </figure>
+
+        <div class="xpl-cta">
+          <a href="#plans" class="xpl-btn">Try Healthy Nest</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Scene 4 -->
+    <article class="xpl-scene" data-scene="4" data-theme="wholegrain">
+      <div class="xpl-bg"></div>
+      <div class="xpl-content">
+        <header class="xpl-header">
+          <h2>Wholegrain Goodness</h2>
+          <p>Sustained energy, healthy fats, and flavour that hits.</p>
+        </header>
+
+        <figure class="xpl-plate">
+          <img
+            class="xpl-img lazy"
+            data-src="https://i.postimg.cc/63y9YYj5/Avacado-Toast-Showcase.jpg"
+            alt="Avocado Toast — wholegrain and creamy" />
+          <figcaption class="xpl-caption">
+            <strong>Avocado Toast</strong>
+            <span class="xpl-chips">
+              <em>🥑 Healthy Fats</em><em>🌾 Wholegrain</em><em>⚡ Quick Bite</em>
+            </span>
+          </figcaption>
+        </figure>
+
+        <div class="xpl-cta">
+          <a href="#gallery" class="xpl-btn xpl-ghost">See Menu</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Scene 5 -->
+    <article class="xpl-scene" data-scene="5" data-theme="omega">
+      <div class="xpl-bg"></div>
+      <div class="xpl-content">
+        <header class="xpl-header">
+          <h2>Omega-Rich & Bright</h2>
+          <p>Brain-friendly fats and zingy herbs for focus & mood.</p>
+        </header>
+
+        <figure class="xpl-plate">
+          <img
+            class="xpl-img lazy"
+            data-src="https://i.postimg.cc/ncvnRskG/Salmon-Plate-Showcase.jpg"
+            alt="Salmon Plate — omega rich dish" />
+          <figcaption class="xpl-caption">
+            <strong>Salmon Plate</strong>
+            <span class="xpl-chips">
+              <em>🐟 Omega-3</em><em>🍋 Citrus Zest</em><em>💚 Anti-Inflammatory</em>
+            </span>
+          </figcaption>
+        </figure>
+
+        <div class="xpl-cta">
+          <a href="#plans" class="xpl-btn">Subscribe</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ==================== ABOUT US — CINEMATIC STORY SECTION ==================== -->
+<section id="about" class="about-cx">
+  <!-- floating decor -->
+  <div class="about-blobs">
+    <span class="blob a"></span>
+    <span class="blob b"></span>
+  </div>
+
+  <header class="about-header">
+    <h2>About <span>NourishNest</span></h2>
+    <p>More than a meal — a mindful movement nourishing people and the planet.</p>
+  </header>
+
+  <!-- Animated panels -->
+  <div class="about-panels">
+    <article class="panel" data-theme="vision">
+      <div class="icon">🌱</div>
+      <h3>Our Vision</h3>
+      <p>A world where healthy eating feels effortless, sustainable, and joyful.</p>
+    </article>
+
+    <article class="panel" data-theme="mission">
+      <div class="icon">💚</div>
+      <h3>Our Mission</h3>
+      <p>To connect people with real food — locally sourced, nutritionally balanced, and beautifully crafted.</p>
+    </article>
+
+    <article class="panel" data-theme="promise">
+      <div class="icon">🤝</div>
+      <h3>Our Promise</h3>
+      <p>Every dish we deliver supports your wellbeing and our planet’s future.</p>
+    </article>
+  </div>
+
+  <!-- Animated stats -->
+  <div class="about-stats">
+    <div class="stat">
+      <span class="num" data-target="50">0</span>
+      <small>Local Farms</small>
+    </div>
+    <div class="stat">
+      <span class="num" data-target="10000">0</span>
+      <small>Meals Delivered</small>
+    </div>
+    <div class="stat">
+      <span class="num" data-target="92">0</span>
+      <small>Customer Satisfaction %</small>
+    </div>
+  </div>
+
+  <!-- Founder message -->
+  <div class="about-founder">
+    <img src="https://i.postimg.cc/CxwJMH4J/Team-Pic.jpg" alt="Founder portrait" class="founder-img" />
+    <div class="founder-text">
+      <blockquote>
+        “We believe food should fuel more than the body — it should nurture your values.”
+      </blockquote>
+      <cite>— Shivam Jambagi, Founder</cite>
+    </div>
+    <button id="aboutStoryBtn" class="story-btn">Our Story →</button>
+  </div>
+</section>
+
+<!-- =================== STYLES =================== -->
+<style>
+.about-cx {
+  position: relative;
+  padding: 8rem 10%;
+  background: linear-gradient(180deg,#f9fcf3,#ffffff);
+  overflow: hidden;
+  text-align: center;
+}
+.about-header h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #3b2f1e;
+}
+.about-header h2 span { color:#4E5C36; }
+.about-header p {
+  font-size:1.15rem;
+  max-width:700px;
+  margin:0.6rem auto 3rem;
+  color:#5c4d39;
+}
+
+/* blobs */
+.about-blobs .blob {
+  position:absolute;
+  border-radius:50%;
+  filter:blur(60px);
+  opacity:.35;
+  animation:float 12s ease-in-out infinite alternate;
+}
+.blob.a{width:360px;height:360px;background:#e8f7da;top:-120px;left:-90px;}
+.blob.b{width:300px;height:300px;background:#d8f0c8;bottom:-140px;right:-80px;animation-duration:14s;}
+@keyframes float{from{transform:translateY(0) scale(1)}to{transform:translateY(40px) scale(1.06)}}
+
+/* panels */
+.about-panels {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:1.6rem;
+  max-width:1000px;
+  margin:0 auto 4rem;
+}
+.panel {
+  position:relative;
+  background:#fff;
+  border-radius:22px;
+  padding:2rem 1.6rem;
+  border:1px solid #e7efd5;
+  box-shadow:0 14px 36px rgba(0,0,0,.08);
+  opacity:0;transform:translateY(20px);
+  transition:.6s ease;
+}
+.panel.inview{opacity:1;transform:translateY(0);}
+.panel .icon{font-size:2rem;margin-bottom:.8rem;}
+.panel[data-theme="vision"]{border-top:6px solid #88a86b;}
+.panel[data-theme="mission"]{border-top:6px solid #9cc98f;}
+.panel[data-theme="promise"]{border-top:6px solid #b6d9a0;}
+.panel h3{font-size:1.4rem;color:#3b2f1e;margin-bottom:.4rem;}
+.panel p{color:#5c4d39;}
+
+/* stats */
+.about-stats {
+  display:flex;
+  justify-content:center;
+  gap:2.5rem;
+  margin:3rem auto;
+  flex-wrap:wrap;
+}
+.stat {
+  background:#fff;
+  padding:1rem 2rem;
+  border-radius:18px;
+  box-shadow:0 10px 22px rgba(0,0,0,.06);
+  border:1px solid #e6e2cf;
+}
+.stat .num {
+  display:block;
+  font-size:2rem;
+  font-weight:900;
+  color:#4E5C36;
+}
+.stat small {
+  color:#5c4d39;
+}
+
+/* founder */
+.about-founder {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  gap:2rem;
+  max-width:1100px;
+  margin:4rem auto 0;
+}
+.founder-img {
+  width:100%;
+  border-radius:28px;
+  box-shadow:0 14px 36px rgba(0,0,0,.1);
+}
+.founder-text blockquote {
+  font-size:1.3rem;
+  color:#3b2f1e;
+  line-height:1.6;
+  margin-bottom:.5rem;
+}
+.founder-text cite {
+  font-style:normal;
+  color:#6a5b42;
+  font-weight:700;
+}
+.story-btn {
+  grid-column:span 2;
+  justify-self:center;
+  margin-top:2rem;
+  background:#4E5C36;
+  color:#fff;
+  border:none;
+  border-radius:40px;
+  padding:1rem 1.6rem;
+  font-weight:800;
+  letter-spacing:.2px;
+  cursor:pointer;
+  transition:.3s;
+  box-shadow:0 10px 24px rgba(78,92,54,.25);
+}
+.story-btn:hover{transform:translateY(-3px);background:#3d4b2c;}
+
+@media(max-width:820px){
+  .about-founder{grid-template-columns:1fr;}
+  .founder-img{order:-1;}
+}
+</style>
+
+<!-- =================== SCRIPTS =================== -->
+<script>
+// reveal panels
+const panels=document.querySelectorAll('.panel');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('inview'); observer.unobserve(e.target); }
+  });
+},{threshold:.4});
+panels.forEach(p=>observer.observe(p));
+
+// counters
+const nums=document.querySelectorAll('.about-stats .num');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    const el=e.target;
+    const target=+el.dataset.target;
+    let cur=0;
+    const step=Math.ceil(target/80);
+    const t=setInterval(()=>{
+      cur+=step;
+      if(cur>=target){cur=target;clearInterval(t);}
+      el.textContent=cur.toLocaleString();
+    },25);
+    io.unobserve(el);
+  });
+},{threshold:.6});
+nums.forEach(n=>io.observe(n));
+
+// founder modal
+document.getElementById('aboutStoryBtn').addEventListener('click',()=>{
+  const modal=document.createElement('div');
+  modal.className='about-modal';
+  modal.innerHTML=`<div class="modal-content">
+      <button class="close">✕</button>
+      <h3>Our Story</h3>
+      <p>Started with a simple goal: make eating right feel effortless. NourishNest began in small local kitchens, collaborating with farmers who believed in the same vision — sustainability through simplicity. Today, we craft balanced meals that serve people, communities, and the planet.</p>
+    </div>`;
+  document.body.appendChild(modal);
+  modal.querySelector('.close').onclick=()=>modal.remove();
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+});
+</script>
+
+<style>
+.about-modal {
+  position:fixed;inset:0;background:rgba(0,0,0,.45);
+  display:grid;place-items:center;z-index:9999;
+  backdrop-filter:blur(4px);
+}
+.about-modal .modal-content {
+  background:#fff;
+  padding:2rem;
+  border-radius:20px;
+  max-width:700px;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+  text-align:left;
+  position:relative;
+}
+.about-modal .close {
+  position:absolute;
+  top:10px;right:10px;
+  background:#f0f0ee;
+  border:none;
+  border-radius:8px;
+  width:32px;height:32px;
+  cursor:pointer;
+}
+.about-modal h3 {color:#3b2f1e;margin-bottom:1rem;}
+.about-modal p {color:#5c4d39;line-height:1.6;}
+
+
+</style>
+
+
+<!-- ===================== OUR MISSION — LIVING WORDS ===================== -->
+<section id="mission" class="mission-section">
+  <!-- Background animation -->
+  <div class="mission-bg">
+    <canvas id="leafCanvas"></canvas>
+    <div class="mission-gradient"></div>
+  </div>
+
+  <div class="mission-content">
+    <header class="mission-header">
+      <h2>Our <span>Mission</span></h2>
+      <p id="missionText"></p>
+    </header>
+
+    <!-- Core message instead of Earth -->
+    <div class="mission-core">
+      <h3 class="mission-quote">
+        <span class="line">“We’re redefining how nourishment feels —</span>
+        <span class="line delay">from your body to the planet you live on.”</span>
+      </h3>
+      <div class="core-glow"></div>
+    </div>
+
+    <!-- Pillars -->
+    <div class="mission-pillars">
+      <div class="pillar" data-tip="Healthy food that’s both delicious and sustainable">
+        <div class="icon">🥗</div>
+        <h3>Nourishment</h3>
+      </div>
+
+      <div class="pillar" data-tip="Circular economy, zero waste packaging">
+        <div class="icon">♻️</div>
+        <h3>Sustainability</h3>
+      </div>
+
+      <div class="pillar" data-tip="AI-powered nutrition recommendations">
+        <div class="icon">⚙️</div>
+        <h3>Innovation</h3>
+      </div>
+
+      <div class="pillar" data-tip="Empowering local growers and mindful eaters">
+        <div class="icon">🤝</div>
+        <h3>Community</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STYLES ===================== -->
+<style>
+.mission-section {
+  position: relative;
+  overflow: hidden;
+  padding: 9rem 10%;
+  color: #3b2f1e;
+  background: #f9fcf3;
+  text-align: center;
+}
+
+/* Background */
+.mission-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+#leafCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.mission-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 40%, rgba(196, 235, 173, 0.5), transparent 70%), 
+              radial-gradient(ellipse at 70% 60%, rgba(255, 255, 240, 0.4), transparent 70%);
+  animation: glowShift 12s ease-in-out infinite alternate;
+}
+@keyframes glowShift {
+  from {opacity: 0.8; transform: scale(1);}
+  to {opacity: 1; transform: scale(1.1);}
+}
+
+/* Header */
+.mission-content { position: relative; z-index: 2; }
+.mission-header h2 {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #3b2f1e;
+}
+.mission-header h2 span { color: #4E5C36; }
+.mission-header p {
+  font-size: 1.3rem;
+  color: #5a4d3b;
+  max-width: 760px;
+  margin: 1rem auto 3rem;
+  min-height: 3rem;
+}
+
+/* Core message */
+.mission-core {
+  position: relative;
+  margin: 3rem auto;
+  max-width: 800px;
+  text-align: center;
+}
+.mission-quote {
+  position: relative;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #3b2f1e;
+  line-height: 1.6;
+  text-shadow: 0 0 20px rgba(79, 92, 54, 0.15);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 2s ease forwards 1s;
+}
+.mission-quote .line {
+  display: block;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: lineReveal 2.6s ease forwards;
+}
+.mission-quote .line.delay { animation-delay: 1.6s; }
+@keyframes fadeUp {
+  to {opacity: 1; transform: translateY(0);}
+}
+@keyframes lineReveal {
+  0% {opacity: 0; transform: translateY(15px);}
+  100% {opacity: 1; transform: translateY(0);}
+}
+.core-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 60px;
+  background: radial-gradient(circle, rgba(141, 182, 99, 0.25), transparent 60%);
+  filter: blur(40px);
+  z-index: -1;
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+  0% {opacity: 0.7; transform: scale(1);}
+  100% {opacity: 1; transform: scale(1.1);}
+}
+
+/* Pillars */
+.mission-pillars {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.6rem;
+  margin: 4rem auto;
+  max-width: 1000px;
+}
+.pillar {
+  background: #fff;
+  border-radius: 22px;
+  padding: 2rem 1.2rem;
+  flex: 1 1 220px;
+  max-width: 240px;
+  border: 1px solid #e6e2cf;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+  transition: transform 0.4s, box-shadow 0.4s;
+  position: relative;
+  cursor: pointer;
+}
+.pillar:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 18px 42px rgba(78,92,54,0.25);
+}
+.pillar .icon {
+  font-size: 2.4rem;
+  margin-bottom: .8rem;
+}
+.pillar h3 {
+  font-size: 1.25rem;
+  color: #3b2f1e;
+}
+.pillar::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #2f2f2f;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: .3s;
+}
+.pillar:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+  .mission-header h2 { font-size: 2.4rem; }
+  .mission-quote { font-size: 1.2rem; }
+}
+</style>
+
+<!-- ===================== SCRIPT ===================== -->
+<script>
+// typewriter effect for top paragraph
+const missionLines = [
+  "To make mindful eating effortless, modern, and sustainable.",
+  "Every meal fuels your body — and heals our planet."
+];
+let missionIndex = 0, textIndex = 0;
+const missionEl = document.getElementById('missionText');
+function typeLine() {
+  if (missionIndex < missionLines.length) {
+    const line = missionLines[missionIndex];
+    missionEl.textContent = line.slice(0, textIndex++);
+    if (textIndex <= line.length) {
+      setTimeout(typeLine, 45);
+    } else {
+      textIndex = 0;
+      missionIndex++;
+      setTimeout(typeLine, 1000);
+    }
+  }
+}
+typeLine();
+
+// floating leaves animation
+const canvas = document.getElementById('leafCanvas');
+const ctx = canvas.getContext('2d');
+let leaves = [];
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = document.querySelector('.mission-section').offsetHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function createLeaf() {
+  return {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: 10 + Math.random() * 14,
+    speed: 0.3 + Math.random() * 0.8,
+    drift: (Math.random() - 0.5) * 0.6,
+    emoji: ['🍃', '🍂', '🍁'][Math.floor(Math.random() * 3)]
+  };
+}
+for (let i = 0; i < 25; i++) leaves.push(createLeaf());
+
+function animateLeaves() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = '18px serif';
+  leaves.forEach(leaf => {
+    ctx.fillText(leaf.emoji, leaf.x, leaf.y);
+    leaf.y += leaf.speed;
+    leaf.x += leaf.drift;
+    if (leaf.y > canvas.height + 20) {
+      leaf.y = -20;
+      leaf.x = Math.random() * canvas.width;
+    }
+  });
+  requestAnimationFrame(animateLeaves);
+}
+animateLeaves();
+</script>
+
+
+
+
+    <!-- Gallery (Upgraded) -->
+    <section class="food-gallery" id="gallery" aria-label="Food Gallery">
+      <h2 class="gallery-title">Our Food Gallery</h2>
+      <p class="gallery-head">Real dishes from our rotating menus — vibrant, balanced, and crafted with premium ingredients.</p>
+
+      <div class="food-header">
+        <input type="text" id="searchFood" placeholder="Search food..."/>
+        <select id="filterCategory">
+          <option value="all">All</option>
+          <option value="vegan">Vegan</option>
+          <option value="protein">High Protein</option>
+          <option value="glutenfree">Gluten Free</option>
+        </select>
+      </div>
+
+      <div class="food-grid gallery-locked" id="foodGrid">
+
+        <div class="food-card" data-category="vegan">
+          <span class="food-chip">Vegan</span>
+          <img src="https://i.postimg.cc/ZY3LrD7p/Vegan-Bowl.jpg" alt="Vegan Bowl" loading="lazy">
+          <div class="food-body">
+            <h4>Vegan Bowl</h4>
+            <span class="tag">Plant-powered</span>
+          </div>
+        </div>
+
+        <div class="food-card" data-category="protein">
+          <span class="food-chip">High Protein</span>
+          <img src="https://i.postimg.cc/3NgCYd41/Grilled-Chicken.jpg" alt="Grilled Chicken" loading="lazy">
+          <div class="food-body">
+            <h4>Grilled Chicken</h4>
+            <span class="tag">Lean & satisfying</span>
+          </div>
+        </div>
+
+        <div class="food-card" data-category="glutenfree">
+          <span class="food-chip">Gluten Free</span>
+          <img src="https://i.postimg.cc/kXmvwFLD/Quinoa-Salad-9.jpg" alt="Quinoa Salad" loading="lazy">
+          <div class="food-body">
+            <h4>Quinoa Salad</h4>
+            <span class="tag">Fresh crunch</span>
+          </div>
+        </div>
+
+        <div class="food-card" data-category="vegan">
+          <span class="food-chip">Vegan</span>
+          <img src="https://i.postimg.cc/BvVCgWfR/Avacado-Toast.jpg" alt="Avocado Toast" loading="lazy">
+          <div class="food-body">
+            <h4>Avocado Toast</h4>
+            <span class="tag">Wholegrain</span>
+          </div>
+        </div>
+
+        <div class="food-card" data-category="protein">
+          <span class="food-chip">High Protein</span>
+          <img src="https://i.postimg.cc/t4RtGRXS/Salmon-Plate.jpg" alt="Salmon Plate" loading="lazy">
+          <div class="food-body">
+            <h4>Salmon Plate</h4>
+            <span class="tag">Omega-rich</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="view-all locked" style="margin-top:2rem;">
+  <a id="viewAllBtn" class="btn-primary" href="#gallery">View All</a>
+</div>
+
+    </section>
+
+    <!-- Testimonials (Upgraded) -->
+    <section class="testimonials" id="testimonials" aria-label="Testimonials">
+      <h2 class="testimonials-title">What Our Community Says</h2>
+      <p class="testimonials-subtitle">Real stories from people who made NourishNest part of everyday life.</p>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <span class="quote-mark">“</span>
+          <div class="t-head">
+            <div class="avatar">ER</div>
+            <div>
+              <div class="testimonial-name">Emily R.</div>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testimonial-text">“NourishNest has completely transformed how I eat. Fresh, delicious, and nourishing meals delivered right to me!”</p>
+          <span class="testimonial-tag">Wellness Enthusiast</span>
+        </div>
+
+        <div class="testimonial-card">
+          <span class="quote-mark">“</span>
+          <div class="t-head">
+            <div class="avatar">JM</div>
+            <div>
+              <div class="testimonial-name">Jason M.</div>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testimonial-text">“The variety and quality are unmatched. I feel healthier, and mealtime is finally stress-free.”</p>
+          <span class="testimonial-tag">Busy Professional</span>
+        </div>
+
+        <div class="testimonial-card">
+          <span class="quote-mark">“</span>
+          <div class="t-head">
+            <div class="avatar">SL</div>
+            <div>
+              <div class="testimonial-name">Samantha L.</div>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testimonial-text">“As a mom, having nutritious meals ready saves me so much time. My entire family loves it.”</p>
+          <span class="testimonial-tag">Mother of 2</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-choose-us" aria-label="Why Choose Us">
+      <h2 class="wcu-title">Why Choose NourishNest</h2>
+      <p class="wcu-subtitle">A healthier lifestyle made simple, natural, and enjoyable.</p>
+      <div class="wcu-grid">
+        <div class="wcu-card"><div class="wcu-icon">🥦</div><h3>Fresh & Organic Ingredients</h3><p>We work with trusted local farms to bring you premium, whole-food produce.</p></div>
+        <div class="wcu-card"><div class="wcu-icon">🍽️</div><h3>Nutritionist-Designed Meals</h3><p>Every meal is curated to support your wellness and keep your energy steady.</p></div>
+        <div class="wcu-card"><div class="wcu-icon">📦</div><h3>Eco-Friendly Packaging</h3><p>Our packaging is biodegradable & recyclable — good for you and the planet.</p></div>
+        <div class="wcu-card"><div class="wcu-icon">⏳</div><h3>Convenient & Time-Saving</h3><p>Wholesome meals ready in minutes — no prep, no stress, all nourishment.</p></div>
+      </div>
+    </section>
+
+    <!-- Plans (Upgraded) -->
+    <section id="plans" class="pricing-section" aria-label="Plans">
+      <div class="pricing-header">
+        <h2>Choose Your Plan</h2>
+        <p>Healthy meals delivered weekly. Cancel anytime.</p>
+        <div class="plan-toggle" role="tablist" aria-label="Billing toggle">
+          <button class="active" id="weeklyBtn" aria-selected="true">Weekly</button>
+          <button id="monthlyBtn" aria-selected="false">Student Discount (save 10%)</button>
+        </div>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Starter -->
+        <div class="pricing-card">
+          <h3>Starter Nest</h3>
+          <p class="price"><span data-weekly="29" data-monthly="26.10">£29</span>/week</p>
+          <ul>
+            <li>3 meals weekly</li>
+            <li>Fresh & organic</li>
+            <li>Nutritionist approved</li>
+          </ul>
+          <a href="#login" class="pricing-btn" data-plan="Starter Nest" data-price="29">Get Started</a>
+        </div>
+
+        <!-- Healthy (featured) -->
+        <div class="pricing-card featured-plan">
+          <div class="badge">Most Popular</div>
+          <h3>Healthy Nest</h3>
+          <p class="price"><span data-weekly="49" data-monthly="44.10">£49</span>/week</p>
+          <ul>
+            <li>6 meals weekly</li>
+            <li>Premium ingredients</li>
+            <li>Custom meal options</li>
+            <li>Pause anytime</li>
+          </ul>
+          <a href="#login" class="pricing-btn" data-plan="Healthy Nest" data-price="49">Subscribe</a>
+        </div>
+
+        <!-- Family -->
+        <div class="pricing-card">
+          <h3>Family Nest</h3>
+          <p class="price"><span data-weekly="79" data-monthly="71.10">£79</span>/week</p>
+          <ul>
+            <li>10 meals weekly</li>
+            <li>Family portions</li>
+            <li>Kids-friendly menu</li>
+            <li>VIP support</li>
+          </ul>
+          <a href="#login" class="pricing-btn" data-plan="Family Nest" data-price="79">Join Family Plan</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact-page" style="background:#fffaf0; padding:8rem 10%; border-top:2px solid #e6dcc1;">
+      <h2 style="font-size:3rem; color:#3b2f1e; text-align:center; margin-bottom:1rem;">Get in Touch</h2>
+      <p style="text-align:center; color:#6d5f47; margin-bottom:3rem;">Have questions or want to learn more? We're here to help you nourish your journey.</p>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:3rem; align-items:start;">
+        <!-- Contact Form -->
+        <form style="background:#f8f2e1; padding:2rem; border-radius:20px; box-shadow:0 8px 22px rgba(0,0,0,.08);">
+          <label style="display:block; margin-bottom:0.5rem;">Full Name</label>
+          <input type="text" placeholder="Your Name" style="width:100%; padding:0.9rem; border-radius:12px; border:1px solid #d6cfbd; margin-bottom:1rem;">
+
+          <label style="display:block; margin-bottom:0.5rem;">Email</label>
+          <input type="email" placeholder="you@example.com" style="width:100%; padding:0.9rem; border-radius:12px; border:1px solid #d6cfbd; margin-bottom:1rem;">
+
+          <label style="display:block; margin-bottom:0.5rem;">Message</label>
+          <textarea placeholder="How can we help?" style="width:100%; padding:0.9rem; border-radius:12px; border:1px solid #d6cfbd; margin-bottom:1.5rem; height:120px;"></textarea>
+
+          <button type="button" style="background:#4E5C36; color:#fff; padding:1rem 2rem; border:none; border-radius:999px; font-weight:800; cursor:pointer; width:100%;">Send Message</button>
+        </form>
+
+        <!-- Map -->
+        <div style="border-radius:20px; overflow:hidden; box-shadow:0 8px 22px rgba(0,0,0,.08);">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345092825!2d144.953736315318!3d-37.816279742021376!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577843a95e6fcd!2sMelbourne%20CBD%2C%20Victoria!5e0!3m2!1sen!2sau!4v1638780989403!5m2!1sen!2sau"
+            width="100%" height="100%" style="min-height:350px; border:0;" allowfullscreen="" loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="faq">
+  <h2>Frequently Asked Questions</h2>
+  <p class="faq-sub">Everything you need to know to feel confident choosing NourishNest</p>
+
+  <div class="faq-container">
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Where do you deliver?
+        <span>+</span>
+      </div>
+      <div class="faq-answer">
+        We currently deliver across all major UK cities — with more areas launching soon!
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Are meals fresh or frozen?
+        <span>+</span>
+      </div>
+      <div class="faq-answer">
+        All meals are freshly prepared and chilled — never frozen — to preserve quality & nutrients.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Can I pause or cancel anytime?
+        <span>+</span>
+      </div>
+      <div class="faq-answer">
+        Yes! You have full control to pause, skip weeks, or cancel anytime in your dashboard.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Do you offer student discounts?
+        <span>+</span>
+      </div>
+      <div class="faq-answer">
+        Absolutely! Save 10% with our student plan — healthy eating that fits a student budget.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Success Stories Section (Premium Animation) -->
+<section id="success" style="padding:8rem 10%; background:linear-gradient(180deg,#eff9e6 0%,#ffffff 100%); text-align:center; position:relative; overflow:hidden;">
+
+  <!-- Soft Animated Blobs -->
+  <div class="blob" style="position:absolute; top:-120px; left:-80px; width:320px; height:320px; background:#cbe8b4; opacity:0.25; filter:blur(60px); border-radius:50%; animation: floatBlob 8s infinite alternate ease-in-out;"></div>
+  <div class="blob" style="position:absolute; bottom:-150px; right:-100px; width:360px; height:360px; background:#e5f7cf; opacity:0.35; filter:blur(60px); border-radius:50%; animation: floatBlob 10s infinite alternate-reverse ease-in-out;"></div>
+
+  <h2 style="font-size:3.2rem; color:#3b2f1e; margin-bottom:1rem; font-weight:800;">Real Transformations</h2>
+  <p style="font-size:1.2rem; max-width:720px; margin:0 auto 3.4rem; color:#5c4d39;">Inspiring stories from our community — fueled by mindful nourishment and balanced living.</p>
+
+  <div class="success-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:3rem; position:relative; z-index:2;">
+
+    <!-- Success Card -->
+    <div class="success-card" style="position:relative; overflow:hidden; border-radius:26px; background:#fff; box-shadow:0 16px 36px rgba(0,0,0,0.09); transition:.4s; transform:translateY(30px); opacity:0;">
+      <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde" style="width:100%; height:320px; object-fit:cover; border-radius:26px;" />
+      <div class="success-info" style="position:absolute; bottom:0; left:0; right:0; background:rgba(78,92,54,.92); color:#fff; padding:1.4rem; transform:translateY(100%); transition:.4s; border-radius:0 0 26px 26px; backdrop-filter:blur(8px);">
+        <strong style="font-size:1.3rem;">Emma R.</strong>
+        <p style="font-size:.95rem; opacity:.85; margin:.3rem 0;">Student • Energy Boost</p>
+        <p style="font-size:.95rem; line-height:1.55;">"I stay focused and energized — even during exams!"</p>
+      </div>
+    </div>
+
+    <div class="success-card" style="position:relative; overflow:hidden; border-radius:26px; background:#fff; box-shadow:0 16px 36px rgba(0,0,0,0.09); transition:.4s; transform:translateY(30px); opacity:0;">
+      <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1" style="width:100%; height:320px; object-fit:cover; border-radius:26px;" />
+      <div class="success-info" style="position:absolute; bottom:0; left:0; right:0; background:rgba(78,92,54,.92); color:#fff; padding:1.4rem; transform:translateY(100%); transition:.4s; border-radius:0 0 26px 26px; backdrop-filter:blur(8px);">
+        <strong style="font-size:1.3rem;">Daniel M.</strong>
+        <p style="font-size:.95rem; opacity:.85; margin:.3rem 0;">Fitness • Muscle Gain</p>
+        <p style="font-size:.95rem; line-height:1.55;">"I finally hit protein goals and saw real progress."</p>
+      </div>
+    </div>
+
+    <div class="success-card" style="position:relative; overflow:hidden; border-radius:26px; background:#fff; box-shadow:0 16px 36px rgba(0,0,0,0.09); transition:.4s; transform:translateY(30px); opacity:0;">
+      <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a" style="width:100%; height:320px; object-fit:cover; border-radius:26px;" />
+      <div class="success-info" style="position:absolute; bottom:0; left:0; right:0; background:rgba(78,92,54,.92); color:#fff; padding:1.4rem; transform:translateY(100%); transition:.4s; border-radius:0 0 26px 26px; backdrop-filter:blur(8px);">
+        <strong style="font-size:1.3rem;">Sofia L.</strong>
+        <p style="font-size:.95rem; opacity:.85; margin:.3rem 0;">Mom • Time Saved</p>
+        <p style="font-size:.95rem; line-height:1.55;">"Less stress, more family time — and healthier kids!"</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+@keyframes floatBlob { from{transform:translateY(0) scale(1);} to{transform:translateY(40px) scale(1.07);} }
+.success-card:hover { transform:translateY(-6px) scale(1.02) !important; }
+.success-card:hover .success-info { transform:translateY(0) !important; }
+
+/* Scroll reveal */
+.success-card.reveal { opacity:1 !important; transform:translateY(0) !important; }
+</style>
+
+<script>
+// Hover reveal
+document.querySelectorAll('.success-card').forEach(card => {
+  const info = card.querySelector('.success-info');
+  card.addEventListener('mouseenter', () => info.style.transform = 'translateY(0)');
+  card.addEventListener('mouseleave', () => info.style.transform = 'translateY(100%)');
+});
+
+// Scroll reveal
+function revealCards(){
+  document.querySelectorAll('.success-card').forEach(card =>{
+    const rect = card.getBoundingClientRect();
+    if(rect.top < window.innerHeight - 100){ card.classList.add('reveal'); }
+  });
+}
+window.addEventListener('scroll', revealCards);
+revealCards();
+</script>
+
+<!-- ================= How It Works (S‑Tier) ================= -->
+<section id="how-it-works" style="position:relative; padding:9rem 10%; background:linear-gradient(180deg,#ffffff 0%, #f3faea 100%); overflow:hidden;">
+  <div class="hiw-blob hiw-blob-a"></div>
+  <div class="hiw-blob hiw-blob-b"></div>
+
+  <header style="text-align:center; margin-bottom:3.2rem; position:relative; z-index:2;">
+    <h2 style="font-size:3rem; font-weight:800; color:#3b2f1e; letter-spacing:.2px;">How It Works</h2>
+    <p style="max-width:760px; margin:.7rem auto 0; color:#5b4d38; font-size:1.12rem;">Four simple steps from <strong>craving</strong> to <strong>nourished</strong>. Built for busy humans — powered by nutritionists.</p>
+  </header>
+
+  <!-- Animated path behind cards -->
+  <svg class="hiw-path" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M40 240 C 220 120, 420 120, 600 240 S 980 360, 1160 240" />
+  </svg>
+
+  <div class="hiw-grid">
+    <!-- 1 -->
+    <article class="hiw-card" data-step="1">
+      <div class="hiw-icon">🗂️</div>
+      <h3>Choose Your Plan</h3>
+      <p>Select <em>Starter</em>, <em>Healthy</em>, or <em>Family Nest</em>. Weekly or student-discounted monthly — cancel anytime.</p>
+      <div class="hiw-mini">
+        <span>£‑smart</span>
+        <span>Flexible</span>
+        <span>Fast signup</span>
+      </div>
+      <a href="#plans" class="hiw-btn">Explore Plans</a>
+    </article>
+
+    <!-- 2 -->
+    <article class="hiw-card" data-step="2">
+      <div class="hiw-icon">🥗</div>
+      <h3>Personalise Your Menu</h3>
+      <p>Filter by goals and needs — <strong>vegan</strong>, <strong>high‑protein</strong>, <strong>gluten‑free</strong>. Swap dishes anytime.</p>
+      <div class="hiw-mini">
+        <span>Macros</span>
+        <span>Allergens</span>
+        <span>Chef notes</span>
+      </div>
+      <a href="#gallery" class="hiw-btn">Browse Dishes</a>
+    </article>
+
+    <!-- 3 -->
+    <article class="hiw-card" data-step="3">
+      <div class="hiw-icon">👩‍🍳</div>
+      <h3>Cooked & Packed Fresh</h3>
+      <p>Locally sourced, nutritionist‑designed meals. Chilled (never frozen) in eco‑friendly packaging.</p>
+      <div class="hiw-mini">
+        <span>Local</span>
+        <span>Fresh</span>
+        <span>Eco</span>
+      </div>
+      <button class="hiw-btn hiw-ghost" type="button">Quality Promise</button>
+    </article>
+
+    <!-- 4 -->
+    <article class="hiw-card" data-step="4">
+      <div class="hiw-icon">📦</div>
+      <h3>Delivered, Heat, Enjoy</h3>
+      <p>Track delivery, tap‑to‑heat in minutes, and enjoy the energy boost. Pause or skip weeks anytime.</p>
+      <div class="hiw-mini">
+        <span>Tracked</span>
+        <span>2‑3 min heat</span>
+        <span>Pause easy</span>
+      </div>
+      <a href="#plans" class="hiw-btn">Start Now</a>
+    </article>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="hiw-cta">
+    <h4>Ready to feel amazing?</h4>
+    <a href="#plans" class="hiw-cta-btn">Build my plan</a>
+  </div>
+</section>
+
+<style>
+/***** Blobs *****/
+.hiw-blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;z-index:1;animation:hiwFloat 9s ease-in-out infinite alternate}
+.hiw-blob-a{top:-120px;left:-80px;width:320px;height:320px;background:#cfeec1}
+.hiw-blob-b{bottom:-140px;right:-90px;width:360px;height:360px;background:#e3f7d4;animation-duration:11s}
+@keyframes hiwFloat{from{transform:translateY(0) scale(1)}to{transform:translateY(40px) scale(1.06)}}
+
+/***** Path *****/
+.hiw-path{position:absolute;inset:0;z-index:0}
+.hiw-path path{fill:none;stroke:#cfe2b6;stroke-width:4;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:1400;animation:dash 2.8s ease forwards 0.4s}
+@keyframes dash{to{stroke-dashoffset:0}}
+
+/***** Grid *****/
+.hiw-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:1.8rem}
+@media(max-width:1100px){.hiw-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.hiw-grid{grid-template-columns:1fr}}
+
+/***** Card *****/
+.hiw-card{background:#fff;border-radius:26px;position:relative;padding:1.6rem 1.6rem 1.4rem;box-shadow:0 16px 38px rgba(0,0,0,.08);border:1px solid #e6e2cf;transition:.35s;overflow:hidden}
+.hiw-card::before{content:"";position:absolute;inset:-2px;border-radius:28px;padding:2px;background:conic-gradient(from 0deg, #88a86b, #cfeec1, #88a86b);-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite: xor;mask-composite: exclude;animation:spin 6s linear infinite;opacity:.45}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hiw-card:hover{transform:translateY(-8px);box-shadow:0 22px 46px rgba(0,0,0,.12)}
+
+.hiw-card .hiw-icon{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:1.6rem;background:linear-gradient(135deg,#e7f5e2,#f7fbe9);border:1px solid #d9e7c9;box-shadow:0 8px 18px rgba(0,0,0,.06);margin-bottom:.9rem}
+.hiw-card h3{margin:.1rem 0 .4rem;font-size:1.35rem;color:#3b2f1e}
+.hiw-card p{color:#5b4d38;line-height:1.65;font-size:1.02rem}
+
+.hiw-mini{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 1.2rem}
+.hiw-mini span{background:#f0f6e8;color:#3b2f1e;border:1px solid #dbe7cc;border-radius:999px;padding:.35rem .7rem;font-size:.85rem;font-weight:700}
+
+.hiw-btn{display:inline-block;background:#4E5C36;color:#fff;text-decoration:none;border:none;border-radius:40px;padding:.78rem 1.15rem;font-weight:800;letter-spacing:.2px;transition:.3s;box-shadow:0 10px 24px rgba(78,92,54,.25)}
+.hiw-btn:hover{transform:translateY(-3px);background:#3d4b2c}
+.hiw-ghost{background:#fff;color:#3b2f1e;border:1px solid #cfe2b6;box-shadow:none}
+.hiw-ghost:hover{background:#f6fbef}
+
+/* Step badge */
+.hiw-card::after{content:attr(data-step);position:absolute;top:10px;right:12px;width:36px;height:36px;border-radius:10px;background:#4E5C36;color:#fff;display:grid;place-items:center;font-weight:800;box-shadow:0 10px 20px rgba(78,92,54,.3)}
+
+/* Section CTA */
+.hiw-cta{margin-top:3rem;display:grid;place-items:center;gap:.9rem}
+.hiw-cta h4{font-size:1.4rem;color:#3b2f1e}
+.hiw-cta-btn{display:inline-block;background:#4E5C36;color:#fff;text-decoration:none;border-radius:50px;padding:.95rem 1.6rem;font-weight:800;box-shadow:0 12px 28px rgba(78,92,54,.28);transition:.3s}
+.hiw-cta-btn:hover{transform:translateY(-3px);background:#3d4b2c}
+
+/* Staggered reveal */
+.hiw-card{opacity:0;transform:translateY(24px)}
+.hiw-card.hiw-reveal{opacity:1;transform:translateY(0);transition:transform .6s cubic-bezier(.2,.8,.2,1), opacity .6s}
+</style>
+
+<script>
+// Intersection Observer: stagger card reveal
+(function(){
+  const cards = document.querySelectorAll('#how-it-works .hiw-card');
+  if(!('IntersectionObserver' in window) || !cards.length){
+    cards.forEach((c,i)=> setTimeout(()=> c.classList.add('hiw-reveal'), i*120));
+    return;
+  }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const idx = [...cards].indexOf(entry.target);
+        setTimeout(()=> entry.target.classList.add('hiw-reveal'), idx*120);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: .2 });
+  cards.forEach(c=> io.observe(c));
+})();
+
+// Fun ripple on primary buttons
+(function(){
+  document.querySelectorAll('#how-it-works .hiw-btn').forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      const r = document.createElement('span');
+      r.style.position='absolute'; r.style.pointerEvents='none'; r.style.inset='0';
+      r.style.borderRadius='40px'; r.style.boxShadow='0 0 0 0 rgba(78,92,54,.35)';
+      r.style.transition='box-shadow .6s ease';
+      this.style.position='relative';
+      this.appendChild(r);
+      requestAnimationFrame(()=> r.style.boxShadow='0 0 0 14px rgba(78,92,54,0)');
+      setTimeout(()=> r.remove(), 650);
+    });
+  });
+})();
+</script>
+
+
+<!-- ================== SECTION E: Delivery & Packaging Experience ================== -->
+<section id="delivery" aria-label="Delivery & Packaging" style="position:relative;padding:9rem 10%;background:linear-gradient(180deg,#ffffff 0%,#f3faea 100%);overflow:hidden">
+  <!-- Background blobs -->
+  <div class="del-blob a" aria-hidden="true"></div>
+  <div class="del-blob b" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="del-header">
+    <h2>Delivery & Packaging Experience</h2>
+    <p>Fresh, chilled meals delivered with care. Track it, unbox it, heat it — enjoy in minutes.</p>
+  </header>
+
+  <!-- Track Animation Row -->
+  <div class="del-track">
+    <svg class="track-svg" viewBox="0 0 1200 140" preserveAspectRatio="none" aria-hidden="true">
+      <path class="track-line" d="M20 80 C 200 20, 380 20, 560 80 S 920 140, 1180 80"/>
+    </svg>
+    <div class="truck-wrap" aria-hidden="true">
+      <!-- Truck (pure CSS + minimal SVG) -->
+      <svg class="truck" viewBox="0 0 180 90" role="img" aria-label="Delivery truck">
+        <rect x="8" y="24" width="100" height="40" rx="6" fill="#4E5C36"/>
+        <rect x="108" y="34" width="52" height="30" rx="6" fill="#9fbc7a"/>
+        <rect x="118" y="42" width="16" height="12" rx="2" fill="#ffffff"/>
+        <circle cx="46" cy="70" r="10" fill="#2b261b"/>
+        <circle cx="46" cy="70" r="5" fill="#cfeec1"/>
+        <circle cx="120" cy="70" r="10" fill="#2b261b"/>
+        <circle cx="120" cy="70" r="5" fill="#cfeec1"/>
+      </svg>
+      <!-- Floating box -->
+      <div class="parcel" aria-hidden="true">📦</div>
+    </div>
+
+    <ul class="track-steps" aria-label="Delivery steps">
+      <li><span>1</span> Order received</li>
+      <li><span>2</span> Chef-prepared</li>
+      <li><span>3</span> Chilled & packed</li>
+      <li><span>4</span> Out for delivery</li>
+      <li><span>5</span> Enjoy!</li>
+    </ul>
+  </div>
+
+  <!-- Coverage + Delivery Window -->
+  <div class="del-grid">
+    <!-- Coverage Checker -->
+    <section class="coverage" aria-labelledby="coverageTitle">
+      <h3 id="coverageTitle">Check your delivery area</h3>
+      <p class="muted">UK postcodes — instant check. We’re expanding weekly.</p>
+      <form class="coverage-form" id="coverageForm" novalidate>
+        <input id="postcode" name="postcode" inputmode="text" autocomplete="postal-code" placeholder="e.g. SW1A 1AA" aria-label="Enter UK postcode"/>
+        <button type="submit" class="btn-primary">Check</button>
+      </form>
+      <div id="coverageResult" class="coverage-result" aria-live="polite"></div>
+      <div class="coverage-tags" aria-hidden="true">
+        <span>London</span><span>Manchester</span><span>Birmingham</span><span>Leeds</span><span>Bristol</span><span>Glasgow</span>
+      </div>
+      <small class="muted">Tip: Not in the list? Join the waitlist — we prioritise new areas by demand.</small>
+      <div class="waitlist">
+        <input id="waitlistEmail" type="email" placeholder="your@email.com"/>
+        <button type="button" id="waitlistBtn" class="btn-ghost">Join waitlist</button>
+      </div>
+      <div id="waitlistMsg" class="mini-msg" aria-live="polite"></div>
+    </section>
+
+    <!-- Delivery Window Card -->
+    <section class="window" aria-labelledby="windowTitle">
+      <h3 id="windowTitle">Delivery windows</h3>
+      <ul class="window-list">
+        <li><strong>Mon–Fri</strong> • 7:00–11:00 • 16:00–20:00</li>
+        <li><strong>Saturday</strong> • 9:00–14:00</li>
+        <li><strong>Sunday</strong> • Restock & prep</li>
+      </ul>
+      <div class="window-cta">
+        <a href="#plans" class="btn-primary">Choose a slot</a>
+      </div>
+      <p class="muted tiny">Live tracking link is sent by SMS & email when your order is dispatched.</p>
+    </section>
+  </div>
+
+  <!-- Packaging Cards (flip) -->
+  <section class="packaging" aria-labelledby="packTitle">
+    <h3 id="packTitle">Planet-kind packaging</h3>
+    <p class="muted">Keeps food fresh longer — easy to recycle or return.</p>
+
+    <div class="pack-grid">
+      <!-- Card 1 -->
+      <article class="pack-card" tabindex="0" aria-label="Recyclable trays">
+        <div class="face front">
+          <div class="icon">🥗</div>
+          <h4>Recyclable trays</h4>
+          <p>Mono-material PET for clarity & freshness.</p>
+        </div>
+        <div class="face back">
+          <ul>
+            <li>✅ Widely recycled (check local)</li>
+            <li>♻️ Rinse & place in recycling</li>
+            <li>🧪 BPA-free</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="pack-card" tabindex="0" aria-label="Insulated liners">
+        <div class="face front">
+          <div class="icon">🧊</div>
+          <h4>Insulated liners</h4>
+          <p>Paper honeycomb keeps meals chilled.</p>
+        </div>
+        <div class="face back">
+          <ul>
+            <li>📦 Return for reuse (free)</li>
+            <li>🧾 Prepaid label included</li>
+            <li>🌿 70% recycled paper</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="pack-card" tabindex="0" aria-label="Ice packs">
+        <div class="face front">
+          <div class="icon">❄️</div>
+          <h4>Ice packs</h4>
+          <p>Food-safe gel for safe transit.</p>
+        </div>
+        <div class="face back">
+          <ul>
+            <li>🧴 Drain gel, recycle sleeve</li>
+            <li>🧊 Reuse for picnics</li>
+            <li>♻️ Curbside compatible</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="pack-card" tabindex="0" aria-label="Cooler bag">
+        <div class="face front">
+          <div class="icon">👜</div>
+          <h4>Cooler bag</h4>
+          <p>Optional add-on for frequent orders.</p>
+        </div>
+        <div class="face back">
+          <ul>
+            <li>🔁 Lifetime reuse</li>
+            <li>🧽 Wipe-clean interior</li>
+            <li>🌱 Low-impact materials</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="pack-cta">
+      <button class="btn-primary" id="returnKitBtn" type="button">Get a free return kit</button>
+      <p class="muted tiny" id="returnMsg" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- Unboxing Steps -->
+  <section class="unbox" aria-labelledby="unboxTitle">
+    <h3 id="unboxTitle">Unboxing in 3 steps</h3>
+    <ol class="unbox-steps">
+      <li>
+        <span class="badge">1</span>
+        <h4>Bring box inside</h4>
+        <p>Meals arrive <strong>chilled</strong>. Pop them in the fridge within 4 hours.</p>
+      </li>
+      <li>
+        <span class="badge">2</span>
+        <h4>Sort & store</h4>
+        <p>Use the <em>color dots</em> on labels to plan your week: Mon–Sun.</p>
+      </li>
+      <li>
+        <span class="badge">3</span>
+        <h4>Heat & enjoy</h4>
+        <p>Microwave 2–3 minutes or oven 12–14 minutes. Check label.</p>
+      </li>
+    </ol>
+    <a href="#plans" class="btn-primary unbox-btn">Build my weekly box</a>
+  </section>
+</section>
+
+<!-- ================== SECTION E: Styles ================== -->
+<style>
+  :root{
+    --nn-green:#4E5C36; --nn-ink:#3b2f1e; --nn-cream:#fffaf0; --nn-muted:#6d5f47; --nn-soft:#f3faea;
+  }
+  /* Blobs */
+  .del-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;z-index:0;animation:delFloat 10s ease-in-out infinite alternate}
+  .del-blob.a{top:-120px;left:-80px;width:360px;height:360px;background:#cfeec1}
+  .del-blob.b{bottom:-160px;right:-100px;width:400px;height:400px;background:#e7f5e2;animation-duration:12s}
+  @keyframes delFloat{from{transform:translateY(0) scale(1)}to{transform:translateY(40px) scale(1.06)}}
+
+  /* Header */
+  .del-header{text-align:center;position:relative;z-index:2;margin-bottom:2.6rem}
+  .del-header h2{font-size:3rem;color:var(--nn-ink);font-weight:800;letter-spacing:.3px}
+  .del-header p{max-width:760px;margin:.6rem auto 0;color:var(--nn-muted);font-size:1.08rem}
+
+  /* Track */
+  .del-track{position:relative;z-index:2;margin:2rem 0 2.8rem}
+  .track-svg{width:100%;height:140px}
+  .track-line{fill:none;stroke:#cfe2b6;stroke-width:5;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:1400;animation:dash 2.4s ease forwards .3s}
+  @keyframes dash{to{stroke-dashoffset:0}}
+
+  .truck-wrap{position:absolute;left:0;top:0;width:100%;height:140px;pointer-events:none}
+  .truck{position:absolute;top:26px;left:0;width:120px;height:auto;animation:drive 4.8s cubic-bezier(.2,.8,.2,1) .6s forwards}
+  .parcel{position:absolute;left:120px;top:8px;font-size:24px;animation:parcelFloat 3s ease-in-out infinite}
+  @keyframes drive{from{transform:translateX(-8%)}to{transform:translateX(88%)}}
+  @keyframes parcelFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+  .track-steps{display:flex;gap:1rem;justify-content:space-between;list-style:none;margin:0 0 0 0;padding:0;color:var(--nn-ink);font-weight:700}
+  .track-steps li{display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid #e6e2cf;border-radius:999px;padding:.5rem .8rem;box-shadow:0 8px 22px rgba(0,0,0,.06)}
+  .track-steps li span{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--nn-green);color:#fff;font-size:.9rem}
+
+  /* Grid */
+  .del-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:start;margin-top:1.6rem}
+  @media(max-width:980px){.del-grid{grid-template-columns:1fr}}
+
+  /* Coverage */
+  .coverage{background:#fff;border:1px solid #e6e2cf;border-radius:20px;padding:1.4rem;box-shadow:0 14px 30px rgba(0,0,0,.06)}
+  .coverage h3{font-size:1.6rem;color:var(--nn-ink);margin-bottom:.2rem}
+  .coverage .muted{color:var(--nn-muted)}
+  .coverage-form{display:flex;gap:.6rem;margin:1rem 0}
+  .coverage-form input{flex:1;padding:.9rem 1rem;border-radius:14px;border:1px solid #d6cfbd;background:#fffef9;font-family:Georgia,serif}
+  .coverage-form .btn-primary{border:none;border-radius:999px;padding:.9rem 1.2rem;font-weight:800;background:var(--nn-green);color:#fff;cursor:pointer}
+  .coverage-result{margin:.4rem 0 1rem;font-weight:800}
+  .coverage-result.ok{color:#2e7d32}
+  .coverage-result.no{color:#b9382b}
+  .coverage-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.7rem}
+  .coverage-tags span{background:#f0f6e8;color:#3b2f1e;border:1px solid #dbe7cc;border-radius:999px;padding:.35rem .7rem;font-size:.85rem;font-weight:700}
+  .waitlist{display:flex;gap:.6rem}
+  .waitlist input{flex:1;padding:.7rem .9rem;border:1px solid #d6cfbd;border-radius:12px;background:#fffef9}
+  .btn-ghost{background:#fff;color:#3b2f1e;border:1px solid #cfe2b6;border-radius:999px;padding:.7rem 1rem;font-weight:800;cursor:pointer}
+  .mini-msg{font-size:.9rem;margin-top:.4rem}
+
+  /* Window */
+  .window{background:#f8f2e1;border:1px solid #e6e2cf;border-radius:20px;padding:1.4rem;box-shadow:0 14px 30px rgba(0,0,0,.06)}
+  .window h3{font-size:1.6rem;color:var(--nn-ink)}
+  .window-list{margin:1rem 0;list-style:none;display:grid;gap:.5rem}
+  .window-list li{background:#fff;border:1px dashed #d6cfbd;border-radius:14px;padding:.7rem 1rem}
+  .window-cta{margin-top:.6rem}
+  .window .btn-primary{display:inline-block;background:var(--nn-green);color:#fff;text-decoration:none;border-radius:40px;padding:.85rem 1.15rem;font-weight:800}
+  .tiny{font-size:.9rem}
+
+  /* Packaging flip cards */
+  .packaging{margin-top:2.8rem;text-align:center}
+  .packaging h3{font-size:1.9rem;color:var(--nn-ink)}
+  .packaging .muted{color:var(--nn-muted);margin:.2rem auto 1.2rem}
+  .pack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+  @media(max-width:1100px){.pack-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.pack-grid{grid-template-columns:1fr}}
+  .pack-card{position:relative;height:190px;perspective:1000px;border-radius:20px}
+  .pack-card .face{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;display:grid;place-content:center;gap:.3rem;padding:1rem}
+  .pack-card .front{background:#fff;border:1px solid #e6e2cf;box-shadow:0 12px 26px rgba(0,0,0,.06)}
+  .pack-card .back{background:#f6fbef;border:1px solid #cfe2b6;transform:rotateY(180deg);box-shadow:0 12px 26px rgba(0,0,0,.06)}
+  .pack-card .icon{font-size:1.8rem}
+  .pack-card h4{color:var(--nn-ink)}
+  .pack-card ul{list-style:disc;padding-left:1.2rem;text-align:left}
+  .pack-card:hover,.pack-card:focus{outline:none}
+  .pack-card:hover .front,.pack-card:focus .front{transform:rotateY(180deg)}
+  .pack-card:hover .back,.pack-card:focus .back{transform:rotateY(360deg)}
+  .pack-cta{margin-top:1rem}
+
+  /* Unboxing */
+  .unbox{text-align:center;margin-top:2.6rem}
+  .unbox h3{font-size:1.9rem;color:var(--nn-ink)}
+  .unbox-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0;list-style:none}
+  @media(max-width:980px){.unbox-steps{grid-template-columns:1fr}}
+  .unbox-steps li{background:#fff;border:1px solid #e6e2cf;border-radius:16px;padding:1rem;text-align:left;box-shadow:0 12px 26px rgba(0,0,0,.06)}
+  .unbox-steps h4{color:var(--nn-ink);margin:.2rem 0}
+  .unbox-steps p{color:var(--nn-muted)}
+  .badge{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:9px;background:var(--nn-green);color:#fff;font-weight:800}
+  .unbox-btn{display:inline-block;margin-top:.6rem;background:var(--nn-green);color:#fff;text-decoration:none;border-radius:40px;padding:.9rem 1.2rem;font-weight:800}
+</style>
+
+<!-- ================== SECTION E: Scripts ================== -->
+<script>
+(function(){
+  // ------- Coverage checker (client-side mock) -------
+  const form = document.getElementById('coverageForm');
+  const input = document.getElementById('postcode');
+  const result = document.getElementById('coverageResult');
+  const okAreas = ['SW','SE','E','EC','WC','W','N','NW','CR','BR','IG','RM','M','B','LS','BS','G'];
+  const ukPostcode = /^(GIR 0AA|(?:(?:[A-Z]{1,2}\d{1,2}|[A-Z]{1,2}\d[A-Z]|[A-Z]{1,2}\d{1,2}[A-Z])\s*\d[A-Z]{2}))$/i;
+
+  form?.addEventListener('submit', function(e){
+    e.preventDefault();
+    const raw = (input.value||'').trim().toUpperCase().replace(/\s+/g,'');
+    if(!ukPostcode.test(formatPC(raw))){
+      paint('Please enter a valid UK postcode format (e.g. SW1A 1AA).', false);
+      return;
+    }
+    const prefix = raw.match(/^[A-Z]{1,2}/)?.[0]||'';
+    const supported = okAreas.includes(prefix);
+    if(supported){
+      paint('✔ We deliver to your area! Choose a plan to book your slot.', true);
+    } else {
+      paint('Not yet — but we\'re expanding fast. Join the waitlist and we\'ll prioritise your area.', false);
+    }
+  });
+
+  function formatPC(pc){
+    // Insert a space before the last 3 characters
+    if(pc.length > 3){ return pc.slice(0, pc.length-3) + ' ' + pc.slice(-3); }
+    return pc;
+  }
+  function paint(msg, ok){
+    result.textContent = msg;
+    result.className = 'coverage-result ' + (ok ? 'ok' : 'no');
+  }
+
+  // ------- Waitlist (local only) -------
+  const wBtn = document.getElementById('waitlistBtn');
+  const wEmail = document.getElementById('waitlistEmail');
+  const wMsg = document.getElementById('waitlistMsg');
+  wBtn?.addEventListener('click', ()=>{
+    const email = (wEmail.value||'').trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      wMsg.textContent = 'Please enter a valid email.';
+      wMsg.style.color = '#b9382b';
+      return;
+    }
+    try{
+      const key = 'nn_waitlist_emails';
+      const list = JSON.parse(localStorage.getItem(key)||'[]');
+      if(!list.includes(email)) list.push(email);
+      localStorage.setItem(key, JSON.stringify(list));
+      wMsg.textContent = 'Added! We\'ll notify you when we launch in your area.';
+      wMsg.style.color = '#2e7d32';
+      wEmail.value = '';
+    }catch(_){
+      wMsg.textContent = 'Saved. Thanks!';
+      wMsg.style.color = '#2e7d32';
+    }
+  });
+
+  // ------- Packaging flip: enable keyboard toggle -------
+  document.querySelectorAll('.pack-card').forEach(card=>{
+    card.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        // Toggle by swapping transforms
+        const front = card.querySelector('.front');
+        const back = card.querySelector('.back');
+        const flipped = front.style.transform === 'rotateY(180deg)';
+        front.style.transform = flipped ? 'rotateY(0)' : 'rotateY(180deg)';
+        back.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(360deg)';
+      }
+    })
+  });
+})();
+</script>
+
+
+<!-- =================== LOYALTY & REWARDS (GAMIFICATION) =================== -->
+<section id="rewards" style="position:relative;padding:9rem 10%;background:linear-gradient(180deg,#ffffff 0%,#f5fbef 100%);overflow:hidden;">
+  <!-- Ambient blobs -->
+  <div class="rw-blob rw-blob-a"></div>
+  <div class="rw-blob rw-blob-b"></div>
+
+  <header class="rw-head">
+    <div class="rw-badge">NourishNest Rewards</div>
+    <h2>Earn. Level Up. Unlock Delicious Perks.</h2>
+    <p>Collect points by eating well, building streaks, and sharing the love. Climb tiers for exclusive dishes, discounts, and early menu access.</p>
+  </header>
+
+  <!-- Top row: Points + Progress + Streak -->
+  <div class="rw-top">
+    <!-- Points Wallet -->
+    <article class="rw-card wallet" aria-label="Points wallet">
+      <div class="rw-card-head">
+        <span class="rw-emoji">🥇</span>
+        <h3>Your Points</h3>
+      </div>
+      <div class="wallet-row">
+        <div class="wallet-points">
+          <span class="wallet-value" id="rwPoints">0</span>
+          <span class="wallet-label">pts</span>
+        </div>
+        <button class="rw-btn primary" id="rwSpinOpen" type="button" aria-haspopup="dialog" aria-controls="rwSpinModal">Spin-to-Win</button>
+      </div>
+      <div class="rw-mini row">
+        <span id="rwMemberSince">Member since —</span>
+        <span id="rwLastEarn">Last earn: never</span>
+      </div>
+    </article>
+
+    <!-- Level Progress -->
+    <article class="rw-card progress" aria-label="Level progress">
+      <div class="rw-card-head">
+        <span class="rw-emoji">🌱</span>
+        <h3>Level Progress</h3>
+      </div>
+
+      <div class="level-row">
+        <div class="level-chip" id="rwTierChip">Seed</div>
+        <div class="level-range">
+          <div class="level-bar">
+            <div class="level-fill" id="rwProgress" style="width:0%"></div>
+          </div>
+          <div class="level-stats">
+            <span id="rwTierMin">0</span>
+            <span id="rwTierMax">300</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tiers">
+        <div class="tier is-active" data-name="Seed" data-min="0" data-max="299">
+          <div class="tier-icon">🌱</div>
+          <div class="tier-name">Seed</div>
+          <div class="tier-perk">Welcome perks</div>
+        </div>
+        <div class="tier" data-name="Sprout" data-min="300" data-max="799">
+          <div class="tier-icon">🌿</div>
+          <div class="tier-name">Sprout</div>
+          <div class="tier-perk">5% off + early drops</div>
+        </div>
+        <div class="tier" data-name="Grove" data-min="800" data-max="99999">
+          <div class="tier-icon">🌳</div>
+          <div class="tier-name">Grove</div>
+          <div class="tier-perk">10% off + VIP menu</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Streak -->
+    <article class="rw-card streak" aria-label="Daily streak">
+      <div class="rw-card-head">
+        <span class="rw-emoji">🔥</span>
+        <h3>Daily Streak</h3>
+      </div>
+
+      <div class="streak-ring">
+        <svg viewBox="0 0 120 120" class="ring">
+          <circle cx="60" cy="60" r="52" class="ring-bg"></circle>
+          <circle cx="60" cy="60" r="52" class="ring-fg" id="rwStreakArc" stroke-dasharray="0 999"></circle>
+        </svg>
+        <div class="streak-num" id="rwStreak">0</div>
+      </div>
+      <p class="streak-sub">Hit 7 days for a bonus +120 pts</p>
+      <button class="rw-btn ghost" id="rwCheckIn" type="button">Check in today</button>
+    </article>
+  </div>
+
+  <!-- Earn actions -->
+  <div class="rw-actions">
+    <div class="rw-actions-head">
+      <h3>Ways to Earn</h3>
+      <p>Complete actions below — watch your points grow.</p>
+    </div>
+    <div class="rw-actions-grid">
+      <button class="rw-action" data-pts="40">
+        <span class="a-icon">🍽️</span>
+        <span class="a-title">Log a meal</span>
+        <span class="a-pts">+40</span>
+      </button>
+      <button class="rw-action" data-pts="60">
+        <span class="a-icon">🏃</span>
+        <span class="a-title">Hit step goal</span>
+        <span class="a-pts">+60</span>
+      </button>
+      <button class="rw-action" data-pts="80">
+        <span class="a-icon">🧠</span>
+        <span class="a-title">Mindful eat session</span>
+        <span class="a-pts">+80</span>
+      </button>
+      <button class="rw-action" data-pts="120">
+        <span class="a-icon">👯</span>
+        <span class="a-title">Refer a friend</span>
+        <span class="a-pts">+120</span>
+      </button>
+      <button class="rw-action" data-pts="25">
+        <span class="a-icon">💧</span>
+        <span class="a-title">Hydration goal</span>
+        <span class="a-pts">+25</span>
+      </button>
+      <button class="rw-action" data-pts="30">
+        <span class="a-icon">📷</span>
+        <span class="a-title">Share a dish</span>
+        <span class="a-pts">+30</span>
+      </button>
+    </div>
+  </div>
+
+ 
+
+  <!-- Confetti canvas -->
+  <canvas id="rwConfetti" class="rw-confetti" aria-hidden="true"></canvas>
+
+  <!-- Spin Modal -->
+  <dialog id="rwSpinModal" class="rw-modal" aria-label="Spin to win">
+    <form method="dialog" class="rw-modal-inner" id="rwSpinForm">
+      <header class="rw-modal-head">
+        <h3>Spin-to-Win</h3>
+        <button class="rw-modal-close" value="cancel" aria-label="Close">✕</button>
+      </header>
+      <div class="wheel-wrap">
+        <div class="wheel" id="rwWheel">
+          <!-- 8 slices -->
+          <div class="slice">+20</div>
+          <div class="slice">+40</div>
+          <div class="slice">+0</div>
+          <div class="slice">+60</div>
+          <div class="slice">+100</div>
+          <div class="slice">+0</div>
+          <div class="slice">+80</div>
+          <div class="slice">+50</div>
+        </div>
+        <div class="needle"></div>
+      </div>
+      <button type="button" class="rw-btn primary wide" id="rwSpinBtn">Spin now</button>
+      <p class="rw-modal-sub">One free spin per day. Good luck!</p>
+    </form>
+  </dialog>
+</section>
+
+<style>
+:root{
+  --nn-green:#4E5C36;
+  --nn-green-2:#3d4b2c;
+  --nn-ink:#3b2f1e;
+  --nn-ink-2:#5b4d38;
+  --nn-cream:#fffef8;
+  --nn-soft:#f0f6e8;
+}
+#rewards *{box-sizing:border-box}
+#rewards .rw-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;z-index:1;animation:rwFloat 9s ease-in-out infinite alternate}
+#rewards .rw-blob-a{top:-120px;left:-80px;width:340px;height:340px;background:#cfeec1}
+#rewards .rw-blob-b{bottom:-140px;right:-90px;width:380px;height:380px;background:#e3f7d4;animation-duration:11s}
+@keyframes rwFloat{from{transform:translateY(0) scale(1)}to{transform:translateY(36px) scale(1.05)}}
+
+#rewards .rw-head{text-align:center;position:relative;z-index:2;margin-bottom:2.2rem}
+#rewards .rw-badge{display:inline-block;background:var(--nn-green);color:#fff;padding:.35rem .7rem;border-radius:999px;font-weight:800;margin-bottom:.7rem}
+#rewards .rw-head h2{font-size:3rem;color:var(--nn-ink);letter-spacing:.2px}
+#rewards .rw-head p{max-width:760px;margin:.7rem auto 0;color:var(--nn-ink-2);font-size:1.08rem}
+
+#rewards .rw-top{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr 1.2fr .9fr;gap:1.6rem;margin-top:1.2rem}
+@media(max-width:1100px){#rewards .rw-top{grid-template-columns:1fr;}}
+#rewards .rw-card{background:#fff;border:1px solid #e5e2d1;border-radius:24px;box-shadow:0 16px 42px rgba(0,0,0,.06);padding:1.3rem;position:relative;overflow:hidden}
+#rewards .rw-card::before{content:"";position:absolute;inset:-2px;border-radius:26px;padding:2px;background:conic-gradient(from 0deg,#88a86b22,#cfeec155,#88a86b22);-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.35;animation:rwSpin 7s linear infinite}
+@keyframes rwSpin{to{transform:rotate(360deg)}}
+#rewards .rw-card-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
+#rewards .rw-emoji{font-size:1.6rem;display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#e7f5e2,#f7fbe9);border:1px solid #d9e7c9}
+#rewards .rw-btn{border:none;border-radius:40px;padding:.78rem 1.05rem;font-weight:800;letter-spacing:.2px;cursor:pointer;transition:.25s;position:relative;overflow:hidden}
+#rewards .rw-btn.primary{background:var(--nn-green);color:#fff;box-shadow:0 10px 24px rgba(78,92,54,.25)}
+#rewards .rw-btn.primary:hover{transform:translateY(-2px);background:var(--nn-green-2)}
+#rewards .rw-btn.ghost{background:#fff;color:var(--nn-ink);border:1px solid #dfe8cd}
+#rewards .rw-btn.ghost:hover{background:#f6fbef}
+
+#rewards .wallet-row{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+#rewards .wallet-points{display:flex;align-items:flex-end;gap:.3rem}
+#rewards .wallet-value{font-size:2.6rem;font-weight:900;color:var(--nn-green)}
+#rewards .wallet-label{color:var(--nn-ink-2);margin-bottom:.3rem}
+#rewards .rw-mini.row{display:flex;gap:1rem;margin-top:.8rem;color:#7a6c56;font-size:.92rem}
+
+#rewards .level-row{display:flex;align-items:center;gap:1rem}
+#rewards .level-chip{background:#f0f6e8;border:1px solid #dbe7cc;color:var(--nn-ink);border-radius:999px;padding:.4rem .8rem;font-weight:800}
+#rewards .level-range{flex:1}
+#rewards .level-bar{height:12px;background:#eef5e6;border:1px solid #dbe7cc;border-radius:999px;overflow:hidden}
+#rewards .level-fill{height:100%;background:linear-gradient(90deg,#9fcd83,#4E5C36);width:0%}
+#rewards .level-stats{display:flex;justify-content:space-between;color:#7a6c56;font-size:.85rem;margin-top:.35rem}
+
+#rewards .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-top:1rem}
+#rewards .tier{border:1px solid #e7e2cf;border-radius:16px;padding:.8rem;text-align:center;transition:.25s;background:#fff}
+#rewards .tier .tier-icon{font-size:1.4rem}
+#rewards .tier .tier-name{font-weight:800;margin:.2rem 0;color:var(--nn-ink)}
+#rewards .tier .tier-perk{font-size:.9rem;color:#7a6c56}
+#rewards .tier.is-active{box-shadow:0 12px 28px rgba(78,92,54,.12);transform:translateY(-2px);border-color:#cfe2b6}
+#rewards .tier.is-active::after{content:"Unlocked";display:block;margin-top:.35rem;font-size:.8rem;color:var(--nn-green);font-weight:800}
+
+#rewards .streak{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:center}
+#rewards .streak .streak-ring{width:120px;height:120px;position:relative}
+#rewards .streak .ring{width:120px;height:120px;transform:rotate(-90deg)}
+#rewards .streak .ring-bg{fill:none;stroke:#e9f2df;stroke-width:14}
+#rewards .streak .ring-fg{fill:none;stroke:var(--nn-green);stroke-width:14;stroke-linecap:round}
+#rewards .streak .streak-num{position:absolute;inset:0;display:grid;place-items:center;font-size:1.8rem;font-weight:900;color:var(--nn-green)}
+#rewards .streak .streak-sub{color:#7a6c56;margin-top:.1rem}
+
+#rewards .rw-actions{position:relative;z-index:2;margin-top:2.6rem}
+#rewards .rw-actions-head h3{font-size:1.5rem;color:var(--nn-ink)}
+#rewards .rw-actions-head p{color:var(--nn-ink-2);margin-bottom:1rem}
+#rewards .rw-actions-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem}
+@media(max-width:1200px){#rewards .rw-actions-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:680px){#rewards .rw-actions-grid{grid-template-columns:repeat(2,1fr)}}
+#rewards .rw-action{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.6rem;background:#fff;border:1px solid #e7e2cf;border-radius:16px;padding:.8rem;cursor:pointer;transition:.2s;font-weight:800}
+#rewards .rw-action:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.08)}
+#rewards .rw-action .a-icon{font-size:1.2rem;background:#f6fbef;border:1px solid #dbe7cc;border-radius:10px;width:36px;height:36px;display:grid;place-items:center}
+#rewards .rw-action .a-title{color:var(--nn-ink)}
+#rewards .rw-action .a-pts{color:var(--nn-green)}
+
+#rewards .rw-badges{position:relative;z-index:2;margin-top:2.6rem}
+#rewards .rw-badges-head h3{font-size:1.5rem;color:var(--nn-ink)}
+#rewards .badge-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin-top:.8rem}
+@media(max-width:1200px){#rewards .badge-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:680px){#rewards .badge-grid{grid-template-columns:repeat(2,1fr)}}
+#rewards .badge{border:1px dashed #d8d2bd;border-radius:16px;background:#fff;padding:.9rem 1rem;display:grid;place-items:center;gap:.3rem;color:#846f4b;position:relative;overflow:hidden}
+#rewards .badge span{font-size:1.2rem}
+#rewards .badge small{font-weight:800}
+#rewards .badge.unlocked{border-style:solid;border-color:#cfe2b6;box-shadow:0 10px 24px rgba(78,92,54,.12)}
+#rewards .badge.unlocked::after{content:"Unlocked";position:absolute;top:8px;right:10px;font-size:.7rem;color:var(--nn-green);font-weight:800}
+#rewards .badge.pop{animation:badgePop .6s ease}
+@keyframes badgePop{0%{transform:scale(.8);opacity:.3}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+
+#rewards .rw-confetti{position:absolute;inset:0;pointer-events:none;z-index:4}
+
+#rewards .rw-modal{border:none;padding:0;border-radius:24px;box-shadow:0 28px 60px rgba(0,0,0,.25);width:min(560px,92vw)}
+#rewards .rw-modal::backdrop{background:rgba(0,0,0,.25)}
+#rewards .rw-modal-inner{background:#fff;border-radius:24px;padding:1.2rem}
+#rewards .rw-modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+#rewards .rw-modal-head h3{font-size:1.5rem;color:var(--nn-ink)}
+#rewards .rw-modal-close{background:#fff;border:1px solid #e5e2d1;border-radius:10px;padding:.4rem .6rem;cursor:pointer}
+#rewards .wheel-wrap{position:relative;display:grid;place-items:center;margin:1rem 0}
+#rewards .wheel{--rot:0deg;width:280px;height:280px;border-radius:50%;border:10px solid #eef5e6;background:conic-gradient(#e8f3de 0 12.5%,#fff 0 25%,#e8f3de 0 37.5%,#fff 0 50%,#e8f3de 0 62.5%,#fff 0 75%,#e8f3de 0 87.5%,#fff 0 100%);position:relative;transform:rotate(var(--rot));transition:transform 2.2s cubic-bezier(.2,.8,.2,1)}
+#rewards .wheel .slice{position:absolute;left:50%;top:50%;transform-origin:0 0;transform:rotate(calc(45deg * var(--i))) translate(40px);font-weight:900;color:#3b2f1e}
+#rewards .wheel .slice:nth-child(1){--i:0}
+#rewards .wheel .slice:nth-child(2){--i:1}
+#rewards .wheel .slice:nth-child(3){--i:2}
+#rewards .wheel .slice:nth-child(4){--i:3}
+#rewards .wheel .slice:nth-child(5){--i:4}
+#rewards .wheel .slice:nth-child(6){--i:5}
+#rewards .wheel .slice:nth-child(7){--i:6}
+#rewards .wheel .slice:nth-child(8){--i:7}
+#rewards .needle{position:absolute;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:18px solid var(--nn-green);top:calc(50% - 150px);}
+
+#rewards .rw-btn.wide{width:100%}
+#rewards .rw-modal-sub{color:#7a6c56;text-align:center;margin-top:.6rem}
+
+/* Simple ripple on any .rw-btn */
+#rewards .rw-btn::after{content:"";position:absolute;inset:0;border-radius:40px;box-shadow:0 0 0 0 rgba(78,92,54,.35);opacity:0;transition:box-shadow .6s ease,opacity .6s ease}
+#rewards .rw-btn:active::after{box-shadow:0 0 0 14px rgba(78,92,54,0);opacity:1}
+</style>
+
+<script>
+(function Rewards(){
+  const LS_KEY = 'nn_rewards_v1';
+  const state = load() || {
+    points: 0,
+    memberSince: new Date().toISOString(),
+    lastEarnISO: null,
+    streak: 0,
+    lastCheckInISO: null,
+    badges: {
+      firstEarn:false, streak3:false, streak7:false, sproutTier:false, groveTier:false, shareDish:false
+    }
+  };
+
+  // DOM
+  const elPoints = document.getElementById('rwPoints');
+  const elSince  = document.getElementById('rwMemberSince');
+  const elLast   = document.getElementById('rwLastEarn');
+  const elProg   = document.getElementById('rwProgress');
+  const elTierChip = document.getElementById('rwTierChip');
+  const elMin = document.getElementById('rwTierMin');
+  const elMax = document.getElementById('rwTierMax');
+  const tierEls = [...document.querySelectorAll('#rewards .tier')];
+  const streakArc = document.getElementById('rwStreakArc');
+  const streakNum = document.getElementById('rwStreak');
+  const btnCheckIn = document.getElementById('rwCheckIn');
+  const actionBtns = [...document.querySelectorAll('#rewards .rw-action')];
+  const badgeGrid = document.getElementById('rwBadgeGrid');
+  const spinOpen = document.getElementById('rwSpinOpen');
+  const spinModal = document.getElementById('rwSpinModal');
+  const wheel = document.getElementById('rwWheel');
+  const spinBtn = document.getElementById('rwSpinBtn');
+  const confettiCanvas = document.getElementById('rwConfetti');
+  const ctx = confettiCanvas.getContext('2d');
+
+  /* ---------- UTIL ---------- */
+  function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+  function load(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||''); }catch{ return null; } }
+  function fmtDate(iso){ if(!iso) return '—'; const d=new Date(iso); return d.toLocaleDateString(); }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+  /* ---------- TIERS ---------- */
+  const TIERS = [
+    { name:'Seed',   min:0,   max:299 },
+    { name:'Sprout', min:300, max:799 },
+    { name:'Grove',  min:800, max:99999 }
+  ];
+  function currentTier(points){
+    return TIERS.find(t=>points>=t.min && points<=t.max) || TIERS[0];
+  }
+  function nextTier(points){
+    const idx = TIERS.indexOf(currentTier(points));
+    return TIERS[idx+1] || TIERS[idx];
+  }
+  function setProgress(){
+    const cur = currentTier(state.points);
+    const next = nextTier(state.points);
+    const span = next===cur ? (cur.max-cur.min) : (next.min-cur.min);
+    const pos  = clamp((state.points-cur.min)/span, 0, 1);
+    elTierChip.textContent = cur.name;
+    elMin.textContent = cur.min;
+    elMax.textContent = next.min || cur.max;
+    elProg.style.width = (pos*100).toFixed(1)+'%';
+    tierEls.forEach(t=>{
+      const n=t.dataset.name;
+      t.classList.toggle('is-active', n===cur.name);
+    });
+    // badge unlocks on tier
+    if(cur.name==='Sprout' && !state.badges.sproutTier){ unlockBadge('sproutTier'); }
+    if(cur.name==='Grove'  && !state.badges.groveTier){ unlockBadge('groveTier'); }
+  }
+
+  /* ---------- BADGES ---------- */
+  function unlockBadge(key){
+    state.badges[key]=true; save();
+    const el = badgeGrid.querySelector(`[data-key="${key}"]`);
+    if(el){ el.classList.add('unlocked','pop'); setTimeout(()=>el.classList.remove('pop'),700); }
+    confetti();
+  }
+  function refreshBadges(){
+    for(const [k,v] of Object.entries(state.badges)){
+      const el = badgeGrid.querySelector(`[data-key="${k}"]`);
+      if(el) el.classList.toggle('unlocked', !!v);
+    }
+  }
+
+  /* ---------- STREAK ---------- */
+  function updateStreakUI(){
+    streakNum.textContent = state.streak;
+    const max = 7;
+    const pct = clamp(state.streak / max, 0, 1);
+    const CIRC = 2*Math.PI*52;
+    streakArc.setAttribute('stroke-dasharray', `${pct*CIRC} ${CIRC}`);
+    if(state.streak>=3 && !state.badges.streak3) unlockBadge('streak3');
+    if(state.streak>=7 && !state.badges.streak7){ unlockBadge('streak7'); addPoints(120); }
+  }
+  function canCheckInToday(){
+    if(!state.lastCheckInISO) return true;
+    const last = new Date(state.lastCheckInISO);
+    const today = new Date();
+    const diff = Math.floor((today-last)/86400000);
+    return diff>=1 || last.getDate()!==today.getDate() || last.getMonth()!==today.getMonth();
+  }
+  btnCheckIn.addEventListener('click', ()=>{
+    if(!canCheckInToday()){ toast('Already checked in today'); return; }
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    const last = state.lastCheckInISO ? new Date(state.lastCheckInISO) : null;
+    // If last check-in was yesterday → continue streak, else reset to 1
+    if(last && (new Date().toDateString() === new Date(last.getTime()+86400000).toDateString())){
+      state.streak += 1;
+    } else {
+      state.streak = 1;
+    }
+    state.lastCheckInISO = new Date().toISOString();
+    addPoints(20); // daily check-in reward
+    updateStreakUI(); save(); toast('Checked in +20 pts 🔥');
+  });
+
+  /* ---------- POINTS ---------- */
+  function addPoints(n){
+    const before = state.points;
+    state.points += Number(n)||0;
+    elPoints.textContent = state.points;
+    countUp(elPoints, before, state.points, 650);
+    state.lastEarnISO = new Date().toISOString();
+    if(before===0 && state.points>0 && !state.badges.firstEarn){ unlockBadge('firstEarn'); }
+    setProgress(); save();
+    elLast.textContent = 'Last earn: ' + fmtDate(state.lastEarnISO);
+  }
+  function countUp(el, from, to, dur){
+    const start = performance.now();
+    const diff = to-from;
+    function step(t){
+      const p = Math.min(1,(t-start)/dur);
+      el.textContent = Math.floor(from + diff*p);
+      if(p<1) requestAnimationFrame(step); else el.textContent = to;
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- EARN ACTIONS ---------- */
+  actionBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const pts = Number(btn.dataset.pts||0);
+      addPoints(pts);
+      if(btn.textContent.includes('Share a dish')) unlockBadge('shareDish');
+      toast(`+${pts} pts earned`);
+    });
+  });
+
+  /* ---------- SPIN WHEEL ---------- */
+  spinOpen.addEventListener('click', ()=> spinModal.showModal());
+  spinBtn.addEventListener('click', ()=>{
+    // one spin per day (simple lock)
+    const key = 'nn_spin_date';
+    const last = localStorage.getItem(key);
+    const today = new Date().toDateString();
+    if(last===today){ toast('Already spun today'); return; }
+
+    const idx = Math.floor(Math.random()*8); // 0..7 slice
+    const deg = 360*6 + (360/8)*idx + 22.5; // 6 spins + target slice center
+    wheel.style.setProperty('--rot', `${deg}deg`);
+    setTimeout(()=>{
+      const rewards = [20,40,0,60,100,0,80,50];
+      const win = rewards[(8-idx)%8]; // reverse because rotation
+      if(win>0){ addPoints(win); toast(`You won +${win} pts 🎉`); confetti(); }
+      else{ toast('No win this time – try again tomorrow'); }
+      localStorage.setItem(key, today);
+    }, 2300);
+  });
+
+  /* ---------- CONFETTI ---------- */
+  let confettiTimer=null, confettiParts=[];
+  function confetti(){
+    resizeConfetti();
+    confettiParts = new Array(180).fill(0).map(()=>({
+      x: Math.random()*confettiCanvas.width,
+      y: -20 - Math.random()*80,
+      r: 4+Math.random()*6,
+      vx: -1+Math.random()*2,
+      vy: 2+Math.random()*3,
+      a: Math.random()*360,
+      s: .02+.02*Math.random()
+    }));
+    if(confettiTimer) cancelAnimationFrame(confettiTimer);
+    drawConfetti();
+    setTimeout(()=> cancelAnimationFrame(confettiTimer), 2200);
+  }
+  function drawConfetti(){
+    ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    confettiParts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.a+=p.s*360;
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.a*Math.PI/180);
+      ctx.fillStyle = ['#9fcd83','#4E5C36','#cfeec1','#e8f3de'][p.r|0 % 4];
+      ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
+      ctx.restore();
+    });
+    confettiTimer = requestAnimationFrame(drawConfetti);
+  }
+  function resizeConfetti(){
+    confettiCanvas.width = confettiCanvas.clientWidth || confettiCanvas.offsetWidth || window.innerWidth;
+    confettiCanvas.height = confettiCanvas.clientHeight || confettiCanvas.offsetHeight || 360;
+  }
+  window.addEventListener('resize', resizeConfetti);
+  resizeConfetti();
+
+  /* ---------- TOAST ---------- */
+  function toast(msg){
+    const el=document.createElement('div');
+    el.className='toast show';
+    el.textContent=msg;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1400);
+  }
+
+  /* ---------- INIT ---------- */
+  function init(){
+    elPoints.textContent = state.points;
+    elSince.textContent = 'Member since ' + fmtDate(state.memberSince);
+    elLast.textContent = 'Last earn: ' + fmtDate(state.lastEarnISO);
+    setProgress();
+    refreshBadges();
+    updateStreakUI();
+  }
+  init();
+})();
+</script>
+
+<!-- =================== Sustainability Stats (Premium) =================== -->
+<section id="sustainability" aria-label="Sustainability Impact"
+         style="position:relative;padding:9rem 10%;background:linear-gradient(180deg,#f7fbef 0%,#ffffff 100%);overflow:hidden;">
+
+  <!-- Decorative organic blobs -->
+  <div class="sus-blob sus-blob-a"></div>
+  <div class="sus-blob sus-blob-b"></div>
+
+  <header class="sus-head">
+    <h2>Our Sustainability Impact</h2>
+    <p>Real-time metrics showing how NourishNest reduces waste, emissions and food miles — together with our community.</p>
+
+    <div class="sus-toggle" role="tablist" aria-label="Scope toggle">
+      <button class="active" data-scope="week" aria-selected="true">This Week</button>
+      <button data-scope="month" aria-selected="false">This Month</button>
+      <button data-scope="all" aria-selected="false">All‑Time</button>
+    </div>
+  </header>
+
+  <!-- KPI Cards -->
+  <div class="sus-kpis">
+    <article class="sus-card" aria-live="polite">
+      <div class="sus-icon">🌍</div>
+      <h3>CO₂ Prevented</h3>
+      <div class="sus-big"><span class="num" data-key="co2">0</span> <small>kg</small></div>
+      <p class="sus-sub">vs. typical takeaway meals*</p>
+      <div class="sus-ring" data-percent="72" aria-hidden="true">
+        <div class="sus-ring-inner"></div>
+      </div>
+    </article>
+
+    <article class="sus-card" aria-live="polite">
+      <div class="sus-icon">🍃</div>
+      <h3>Food Waste Avoided</h3>
+      <div class="sus-big"><span class="num" data-key="waste">0</span> <small>kg</small></div>
+      <p class="sus-sub">precise portions & smart rotation</p>
+      <div class="sus-bar" aria-hidden="true"><span style="--val:0%"></span></div>
+    </article>
+
+    <article class="sus-card" aria-live="polite">
+      <div class="sus-icon">🚚</div>
+      <h3>Food Miles Saved</h3>
+      <div class="sus-big"><span class="num" data-key="miles">0</span> <small>mi</small></div>
+      <p class="sus-sub">local sourcing & route batching</p>
+      <svg class="sus-spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points="0,24 12,20 24,22 36,16 48,18 60,12 72,14 84,10 96,12 108,8 120,10"/>
+      </svg>
+    </article>
+
+    <article class="sus-card" aria-live="polite">
+      <div class="sus-icon">🧴</div>
+      <h3>Plastic Reduced</h3>
+      <div class="sus-big"><span class="num" data-key="plastic">0</span> <small>pcs</small></div>
+      <p class="sus-sub">compostable & reusable packaging</p>
+      <div class="sus-chip-row" aria-hidden="true">
+        <span class="chip">♻️ compostable</span>
+        <span class="chip">🔁 reusable</span>
+        <span class="chip">🌿 plant‑based</span>
+      </div>
+    </article>
+  </div>
+
+  <!-- Impact Map & Story -->
+  <div class="sus-map-wrap">
+    <div class="sus-map-card">
+      <div class="sus-map" role="img" aria-label="Local sourcing map">
+        <div class="dot" style="--x:22%;--y:38%"></div>
+        <div class="dot" style="--x:48%;--y:52%"></div>
+        <div class="dot" style="--x:66%;--y:30%"></div>
+        <div class="dot" style="--x:75%;--y:60%"></div>
+        <div class="pulse" aria-hidden="true"></div>
+      </div>
+      <div class="sus-map-body">
+        <h4>Local First. Smarter Routes.</h4>
+        <p>We partner with nearby growers and batch deliveries to minimise distance per meal. Every extra customer in a zone lowers shared emissions.</p>
+        <ul class="sus-bullets">
+          <li>Avg. route efficiency <strong class="routeEff">0%</strong></li>
+          <li>Local sourcing ratio <strong class="localRatio">0%</strong></li>
+          <li>Cold‑chain loss kept under <strong class="coldLoss">0%</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Your Personal Impact Calculator -->
+  <div class="sus-calc">
+    <div class="calc-head">
+      <h3>Your Weekly Impact</h3>
+      <p>Drag the slider to choose how many NourishNest meals you have per week. We’ll estimate your eco‑impact.</p>
+    </div>
+
+    <div class="calc-grid">
+      <div class="calc-control">
+        <label for="mealsRange">Meals per week</label>
+        <input id="mealsRange" type="range" min="0" max="14" value="6" step="1"/>
+        <div class="calc-meta"><span><strong class="mealsVal">6</strong> meals</span><span>Recommended: 6–10</span></div>
+        <div class="calc-ticks" aria-hidden="true"></div>
+      </div>
+
+      <div class="calc-stats">
+        <div class="calc-card">
+          <div class="mini">CO₂ prevented</div>
+          <div class="big"><span class="youCo2">0</span> kg</div>
+        </div>
+        <div class="calc-card">
+          <div class="mini">Plastic avoided</div>
+          <div class="big"><span class="youPlast">0</span> pcs</div>
+        </div>
+        <div class="calc-card">
+          <div class="mini">Waste reduced</div>
+          <div class="big"><span class="youWaste">0</span> kg</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-cta">
+      <a href="#plans" class="cta-btn">Lock in my eco impact</a>
+      <div class="footnote">*Estimates vs. typical UK takeaway baseline. Methodology available on request.</div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* ===== Decor ===== */
+#sustainability{isolation:isolate}
+.sus-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;z-index:0;animation:susFloat 9s ease-in-out infinite alternate}
+.sus-blob-a{top:-120px;left:-80px;width:360px;height:360px;background:#e3f7d4}
+.sus-blob-b{bottom:-140px;right:-90px;width:400px;height:400px;background:#cfeec1;animation-duration:11s}
+@keyframes susFloat{from{transform:translateY(0) scale(1)}to{transform:translateY(40px) scale(1.06)}}
+
+/* ===== Header & Toggle ===== */
+#sustainability .sus-head{text-align:center;position:relative;z-index:2;margin-bottom:2.4rem}
+#sustainability .sus-head h2{font-size:3rem;color:#3b2f1e;font-weight:800;letter-spacing:.2px}
+#sustainability .sus-head p{max-width:820px;margin:.7rem auto 1.2rem;color:#5b4d38;font-size:1.08rem}
+.sus-toggle{display:inline-flex;gap:.4rem;background:#eef5e6;border:1px solid #d9e7c9;padding:.35rem;border-radius:999px}
+.sus-toggle button{border:none;background:transparent;padding:.55rem 1.1rem;border-radius:999px;cursor:pointer;font-weight:800;color:#3b2f1e}
+.sus-toggle button.active{background:#4E5C36;color:#fff}
+
+/* ===== KPI grid ===== */
+.sus-kpis{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem}
+@media(max-width:1100px){.sus-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.sus-kpis{grid-template-columns:1fr}}
+.sus-card{background:#fff;border:1px solid #e6e2cf;border-radius:22px;padding:1.3rem 1.2rem;box-shadow:0 14px 34px rgba(0,0,0,.08);position:relative;overflow:hidden}
+.sus-icon{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,#e7f5e2,#f7fbe9);display:grid;place-items:center;font-size:1.4rem;border:1px solid #d9e7c9;box-shadow:0 8px 18px rgba(0,0,0,.06);margin-bottom:.6rem}
+.sus-card h3{font-size:1.1rem;color:#3b2f1e;margin-bottom:.2rem}
+.sus-big{font-weight:800;color:#4E5C36;font-size:1.9rem;display:flex;align-items:baseline;gap:.3rem}
+.sus-big small{font-weight:700;color:#3b2f1e;font-size:.95rem}
+.sus-sub{color:#6a5b42;font-size:.92rem}
+
+/* Ring progress (CO2) */
+.sus-ring{--pct:72;position:absolute;inset:auto 10px 10px auto;width:84px;height:84px;border-radius:50%;background:conic-gradient(#4E5C36 calc(var(--pct)*1%), #e9f2df 0);display:grid;place-items:center}
+.sus-ring-inner{width:64px;height:64px;border-radius:50%;background:#fff;border:6px solid #f0f6e8;box-shadow:inset 0 0 0 2px #e8efd9}
+
+/* Bar (waste) */
+.sus-bar{height:10px;background:#eef2e7;border-radius:999px;margin-top:.7rem;position:relative;overflow:hidden;border:1px solid #e1e8d7}
+.sus-bar span{position:absolute;left:0;top:0;bottom:0;width:var(--val);background:#4E5C36;border-radius:999px;box-shadow:0 6px 14px rgba(78,92,54,.25)}
+
+/* Sparkline */
+.sus-spark{width:100%;height:40px;margin-top:.4rem}
+.sus-spark polyline{fill:none;stroke:#88a86b;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;animation:dash 1.8s ease forwards}
+@keyframes dash{to{stroke-dashoffset:0}}
+
+/* Chips */
+.sus-chip-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+.chip{background:#f0f6e8;color:#3b2f1e;border:1px solid #dbe7cc;border-radius:999px;padding:.35rem .7rem;font-size:.8rem;font-weight:800}
+
+/* Map card */
+.sus-map-wrap{margin-top:2rem;position:relative;z-index:2}
+.sus-map-card{display:grid;grid-template-columns:1.1fr .9fr;gap:1.6rem;background:#fff;border:1px solid #e6e2cf;border-radius:24px;box-shadow:0 18px 42px rgba(0,0,0,.08);padding:1.2rem}
+@media(max-width:980px){.sus-map-card{grid-template-columns:1fr}}
+.sus-map{position:relative;min-height:280px;border-radius:18px;background:radial-gradient(900px 320px at 60% 20%, #f7fbef 0%, #eef6e7 45%, #e7f2dd 100%),
+         linear-gradient(135deg,#d7ead1 0%,#f3faea 100%);overflow:hidden;border:1px solid #dbe7cc}
+.sus-map::after{content:"UK Local Sourcing";position:absolute;left:14px;top:12px;background:#4E5C36;color:#fff;border-radius:10px;padding:.25rem .5rem;font-size:.8rem;font-weight:800}
+.sus-map .dot{--x:50%;--y:50%;position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#4E5C36;box-shadow:0 0 0 0 rgba(78,92,54,.35);animation:pulse 2.4s infinite}
+@keyframes pulse{to{box-shadow:0 0 0 16px rgba(78,92,54,0)}}
+.sus-map .pulse{position:absolute;left:60%;top:55%;width:80px;height:80px;border-radius:50%;border:2px solid rgba(78,92,54,.25);animation:ping 2.4s infinite}
+@keyframes ping{0%{transform:scale(.6);opacity:.8}100%{transform:scale(1.4);opacity:0}}
+.sus-map-body{padding:.4rem 0}
+.sus-map-body h4{font-size:1.3rem;color:#3b2f1e;margin-bottom:.3rem}
+.sus-bullets{margin:.4rem 0 0 1rem;color:#5a4d3b;display:grid;gap:.2rem}
+.sus-bullets li strong{color:#4E5C36}
+
+/* Calculator */
+.sus-calc{margin-top:2.2rem;background:#fff;border:1px solid #e6e2cf;border-radius:24px;box-shadow:0 18px 42px rgba(0,0,0,.08);padding:1.4rem}
+.calc-head h3{font-size:1.6rem;color:#3b2f1e}
+.calc-head p{color:#5a4d3b;margin:.2rem 0 1rem}
+.calc-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1.2rem}
+@media(max-width:980px){.calc-grid{grid-template-columns:1fr}}
+.calc-control label{font-weight:800;color:#3b2f1e}
+#mealsRange{width:100%;appearance:none;height:12px;background:#eef2e7;border-radius:999px;outline:none;border:1px solid #e1e8d7}
+#mealsRange::-webkit-slider-thumb{appearance:none;width:28px;height:28px;border-radius:50%;background:#4E5C36;box-shadow:0 8px 18px rgba(78,92,54,.35);border:2px solid #e8efd9;cursor:pointer}
+#mealsRange::-moz-range-thumb{width:28px;height:28px;border:none;border-radius:50%;background:#4E5C36;box-shadow:0 8px 18px rgba(78,92,54,.35);cursor:pointer}
+.calc-meta{display:flex;justify-content:space-between;color:#6b5b3e;margin-top:.35rem}
+.calc-ticks{height:8px;background-image:linear-gradient(90deg, transparent 49%, #cfe2b6 50%, transparent 51%);background-size:7.14% 100%;opacity:.5;border-radius:999px;margin-top:.7rem}
+.calc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:620px){.calc-stats{grid-template-columns:1fr}}
+.calc-card{background:#f7fbef;border:1px solid #dbe7cc;border-radius:16px;padding:1rem;text-align:center}
+.calc-card .mini{font-weight:800;color:#3b2f1e;font-size:.9rem}
+.calc-card .big{font-weight:900;color:#4E5C36;font-size:1.6rem}
+.calc-cta{margin-top:1rem;display:grid;place-items:center;gap:.4rem}
+.cta-btn{display:inline-block;background:#4E5C36;color:#fff;text-decoration:none;border-radius:50px;padding:.9rem 1.4rem;font-weight:800;box-shadow:0 12px 28px rgba(78,92,54,.28);transition:.3s}
+.cta-btn:hover{transform:translateY(-3px);background:#3d4b2c}
+.footnote{font-size:.85rem;color:#6b5b3e}
+
+/* Reveal */
+.sus-card,.sus-map-card,.sus-calc{opacity:0;transform:translateY(24px)}
+.sus-reveal{opacity:1 !important;transform:translateY(0) !important;transition:transform .6s cubic-bezier(.2,.8,.2,1), opacity .6s}
+</style>
+
+<script>
+(function(){
+  const scopes = {
+    week:  { co2: 185,  waste: 62, miles: 420, plastic: 340, ring: 72, bar: 68, sparkSpeed: 1800, route: 78, local: 86, cold: 4 },
+    month: { co2: 740,  waste: 248, miles: 1680, plastic: 1260, ring: 80, bar: 78, sparkSpeed: 1400, route: 82, local: 88, cold: 3 },
+    all:   { co2: 14280,waste: 4760,miles: 31800,plastic: 23800,ring: 90, bar: 88, sparkSpeed: 1100, route: 85, local: 90, cold: 3 }
+  };
+
+  const fmt = n => n.toLocaleString('en-GB');
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+  const elNums   = $$('#sustainability .num');
+  const ring     = $('#sustainability .sus-ring');
+  const barFill  = $('#sustainability .sus-bar span');
+  const spark    = $('#sustainability .sus-spark polyline');
+  const routeEff = $('#sustainability .routeEff');
+  const localR   = $('#sustainability .localRatio');
+  const coldLoss = $('#sustainability .coldLoss');
+
+  function animateNumber(el, to, ms=800){
+    const from = Number(el.textContent.replace(/\D/g,'')) || 0;
+    const start = performance.now();
+    function step(t){
+      const k = Math.min(1,(t-start)/ms);
+      const val = Math.round(from + (to-from)*(1- Math.pow(1-k,3)));
+      el.textContent = fmt(val);
+      if(k<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function applyScope(key){
+    const d = scopes[key];
+    $$('#sustainability .sus-toggle button').forEach(b=>{
+      b.classList.toggle('active', b.dataset.scope===key);
+      b.setAttribute('aria-selected', String(b.dataset.scope===key));
+    });
+    animateNumber($('[data-key="co2"]'), d.co2);
+    animateNumber($('[data-key="waste"]'), d.waste);
+    animateNumber($('[data-key="miles"]'), d.miles);
+    animateNumber($('[data-key="plastic"]'), d.plastic);
+
+    ring.style.setProperty('--pct', d.ring);
+    barFill.style.setProperty('--val', d.bar + '%');
+
+    // Spark speed tweak
+    spark.style.animationDuration = (d.sparkSpeed/1000)+'s';
+
+    routeEff.textContent = d.route + '%';
+    localR.textContent   = d.local + '%';
+    coldLoss.textContent = d.cold  + '%';
+  }
+
+  // Toggle handlers
+  $$('#sustainability .sus-toggle button').forEach(btn=>{
+    btn.addEventListener('click', ()=> applyScope(btn.dataset.scope));
+  });
+
+  // Personal impact calculator
+  const range = $('#sustainability #mealsRange');
+  const mealsVal = $('#sustainability .mealsVal');
+  const youCo2 = $('#sustainability .youCo2');
+  const youPl  = $('#sustainability .youPlast');
+  const youWa  = $('#sustainability .youWaste');
+  function updateYourImpact(){
+    const m = Number(range.value);
+    mealsVal.textContent = m;
+    // Baselines (rough demo values): 1 meal saved ≈ 1.8kg CO2, 1.5 plastic items, 0.5kg waste
+    const co2 = Math.round(m * 1.8 * 10)/10;
+    const pl  = Math.round(m * 1.5);
+    const wa  = Math.round(m * 0.5 * 10)/10;
+    youCo2.textContent = co2;
+    youPl.textContent  = fmt(pl);
+    youWa.textContent  = wa;
+  }
+  range.addEventListener('input', updateYourImpact);
+
+  // Reveal on view
+  const revealables = $$('#sustainability .sus-card, #sustainability .sus-map-card, #sustainability .sus-calc');
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('sus-reveal'); io.unobserve(e.target); }});
+  }, { threshold:.15 }) : null;
+  revealables.forEach(el=> io ? io.observe(el) : el.classList.add('sus-reveal'));
+
+  // Init defaults
+  applyScope('week');
+  updateYourImpact();
+})();
+</script>
+   
+<!-- ===================== OUR CERTIFICATIONS & PARTNERSHIPS ===================== -->
+<section id="certs" aria-label="Our Certifications & Partnerships" style="position:relative; padding:9rem 10%; background:linear-gradient(180deg,#ffffff 0%,#f6fbef 100%); overflow:hidden;">
+  <!-- Ambient blobs / leaves -->
+  <div class="cfx-blob a"></div>
+  <div class="cfx-blob b"></div>
+  <div class="cfx-leaf l1">🍃</div>
+  <div class="cfx-leaf l2">🍃</div>
+
+  <header class="cfx-head">
+    <h2>Our Certifications & Partnerships</h2>
+    <p>Independent standards, audited impact and mission‑aligned partners. Real trust, not just talk.</p>
+
+    <!-- KPI counters -->
+    <div class="cfx-kpis">
+      <div class="cfx-kpi">
+        <span class="num" data-target="7">0</span>
+        <small>Active Certifications</small>
+      </div>
+      <div class="cfx-kpi">
+        <span class="num" data-target="24">0</span>
+        <small>Verified Partners</small>
+      </div>
+      <div class="cfx-kpi">
+        <span class="num" data-target="1280">0</span>
+        <small>Tonnes CO₂ Audited</small>
+      </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="cfx-tabs" role="tablist" aria-label="Filter logos">
+      <button class="tab active" data-filter="all" aria-selected="true">All</button>
+      <button class="tab" data-filter="cert">Certifications</button>
+      <button class="tab" data-filter="partner">Partners</button>
+    </div>
+  </header>
+
+  <!-- marquee strip of tiny badges -->
+  <div class="cfx-marquee" aria-hidden="true">
+    <div class="cfx-track">
+      <span>✔️ Audited Supply Chain</span>
+      <span>♻️ Circular Packaging</span>
+      <span>🌱 Soil-Friendly Sourcing</span>
+      <span>🔎 Transparent Nutrition</span>
+      <span>🚚 Low‑Emission Delivery</span>
+      <span>🤝 Community Giveback</span>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="cfx-grid">
+    <!-- Each card uses inline SVG fallback so no external images required -->
+    <article class="brand-card" data-type="cert" data-id="soil-association">
+      <div class="shine"></div>
+      <div class="brand-logo" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#8fbf6b"/><stop offset="1" stop-color="#4E5C36"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#g1)"/><text x="50" y="58" text-anchor="middle" font-size="32" fill="#fff" font-weight="800">SA</text></svg>
+      </div>
+      <div class="brand-body">
+        <h3>Soil Association</h3>
+        <p class="muted">Organic certification for responsible farming.</p>
+        <div class="tags"><span>Organic</span><span>Traceability</span><span>UK</span></div>
+        <div class="badge ok" title="Verified">Verified</div>
+        <button class="btn ghost open-modal">View details</button>
+      </div>
+    </article>
+
+    <article class="brand-card" data-type="cert" data-id="carbon-trust">
+      <div class="shine"></div>
+      <div class="brand-logo" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><defs><linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#b6d9a0"/><stop offset="1" stop-color="#89b86f"/></linearGradient></defs><rect x="8" y="8" width="84" height="84" rx="22" fill="url(#g2)"/><text x="50" y="58" text-anchor="middle" font-size="28" fill="#fff" font-weight="800">CT</text></svg>
+      </div>
+      <div class="brand-body">
+        <h3>Carbon Trust</h3>
+        <p class="muted">Product footprinting & reduction roadmap.</p>
+        <div class="tags"><span>CO₂</span><span>Audit</span><span>Roadmap</span></div>
+        <div class="badge ok">Verified</div>
+        <button class="btn ghost open-modal">View details</button>
+      </div>
+    </article>
+
+    <article class="brand-card" data-type="cert" data-id="fairtrade">
+      <div class="shine"></div>
+      <div class="brand-logo" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><defs><linearGradient id="g3" x1="0" x2="1"><stop offset="0" stop-color="#95c29b"/><stop offset="1" stop-color="#4E5C36"/></linearGradient></defs><polygon points="50,6 94,94 6,94" fill="url(#g3)"/><text x="50" y="67" text-anchor="middle" font-size="24" fill="#fff" font-weight="800">FT</text></svg>
+      </div>
+      <div class="brand-body">
+        <h3>Fairtrade</h3>
+        <p class="muted">Ethical sourcing & fair pay standards.</p>
+        <div class="tags"><span>Ethical</span><span>Farmers</span></div>
+        <div class="badge ok">Verified</div>
+        <button class="btn ghost open-modal">View details</button>
+      </div>
+    </article>
+
+    <!-- Partners -->
+    <article class="brand-card" data-type="partner" data-id="green-routes">
+      <div class="shine"></div>
+      <div class="brand-logo" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><defs><linearGradient id="g4" x1="0" x2="1"><stop offset="0" stop-color="#e5f4d7"/><stop offset="1" stop-color="#a5d08c"/></linearGradient></defs><circle cx="50" cy="50" r="42" fill="url(#g4)"/><path d="M20 60 C40 20, 60 100, 80 60" fill="none" stroke="#3e4a2d" stroke-width="6" stroke-linecap="round"/></svg>
+      </div>
+      <div class="brand-body">
+        <h3>GreenRoutes Logistics</h3>
+        <p class="muted">Low‑emission delivery & cold‑chain efficiency.</p>
+        <div class="tags"><span>EV Fleet</span><span>Cold‑chain</span></div>
+        <div class="badge">Partner</div>
+        <button class="btn ghost open-modal">View details</button>
+      </div>
+    </article>
+
+    <article class="brand-card" data-type="partner" data-id="loop-packaging">
+      <div class="shine"></div>
+      <div class="brand-logo" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><defs><linearGradient id="g5" x1="0" x2="1"><stop offset="0" stop-color="#d9f0c7"/><stop offset="1" stop-color="#79a862"/></linearGradient></defs><rect x="10" y="20" width="80" height="60" rx="14" fill="url(#g5)"/><circle cx="32" cy="50" r="8" fill="#fff"/><circle cx="68" cy="50" r="8" fill="#fff"/></svg>
+      </div>
+      <div class="brand-body">
+        <h3>Loop Packaging</h3>
+        <p class="muted">Reusable containers & wash‑return network.</p>
+        <div class="tags"><span>Reusable</span><span>Closed‑loop</span></div>
+        <div class="badge">Partner</div>
+        <button class="btn ghost open-modal">View details</button>
+      </div>
+    </article>
+
+    <article class="brand-card" data-type="partner" data-id="local-farmers-uk">
+      <div class="shine"></div>
+      <div class="brand-logo" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><defs><linearGradient id="g6" x1="0" x2="1"><stop offset="0" stop-color="#bade98"/><stop offset="1" stop-color="#4E5C36"/></linearGradient></defs><path d="M10 80 L90 80 L90 70 C70 60, 30 60, 10 70 Z" fill="url(#g6)"/><rect x="38" y="42" width="24" height="18" rx="3" fill="#fff"/></svg>
+      </div>
+      <div class="brand-body">
+        <h3>Local Farmers UK</h3>
+        <p class="muted">Seasonal produce from regional suppliers.</p>
+        <div class="tags"><span>Local</span><span>Seasonal</span></div>
+        <div class="badge">Partner</div>
+        <button class="btn ghost open-modal">View details</button>
+      </div>
+    </article>
+  </div>
+
+  <!-- Trust CTA -->
+  <div class="cfx-cta">
+    <div class="seal">✓</div>
+    <div>
+      <h4>Full compliance pack, ready to share</h4>
+      <p>Download our latest certificates & partner attestations in one bundle.</p>
+    </div>
+    <a class="btn" href="#" onclick="window.CFX.downloadPack();return false;">Download Pack (PDF)</a>
+  </div>
+</section>
+
+<style>
+/* ---------- Layout & theme ---------- */
+#certs{--ink:#3b2f1e; --leaf:#4E5C36; --leaf-2:#89b86f; --paper:#ffffff; --muted:#6a5b42}
+#certs *{box-sizing:border-box}
+.cfx-head{position:relative;z-index:2;text-align:center;margin-bottom:1.6rem}
+.cfx-head h2{font-size:3rem;color:var(--ink);font-weight:800;letter-spacing:.2px}
+.cfx-head p{max-width:820px;margin:.6rem auto 1.6rem;color:var(--muted);font-size:1.12rem}
+
+/* KPIs */
+.cfx-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;max-width:880px;margin:1rem auto 1.6rem}
+.cfx-kpi{background:var(--paper);border:1px solid #e6e2cf;border-radius:18px;padding:1rem 1.2rem;box-shadow:0 12px 26px rgba(0,0,0,.06)}
+.cfx-kpi .num{display:block;font-weight:900;font-size:2rem;color:var(--leaf)}
+.cfx-kpi small{color:var(--muted)}
+@media(max-width:780px){.cfx-kpis{grid-template-columns:1fr}}
+
+/* Tabs */
+.cfx-tabs{display:inline-flex;gap:.5rem;background:#eef6e6;border:1px solid #dbe7cc;border-radius:999px;padding:.35rem}
+.cfx-tabs .tab{border:none;background:transparent;padding:.55rem 1.1rem;border-radius:999px;font-weight:800;color:var(--ink);cursor:pointer}
+.cfx-tabs .tab.active{background:var(--leaf);color:#fff}
+
+/* Marquee */
+.cfx-marquee{overflow:hidden;margin:1.6rem 0 2.2rem}
+.cfx-track{display:flex;gap:2.2rem;white-space:nowrap;animation:cfxMar 20s linear infinite}
+.cfx-track span{background:#f0f6e8;border:1px solid #dbe7cc;padding:.5rem .8rem;border-radius:16px;font-weight:700;color:var(--ink)}
+@keyframes cfxMar{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Grid */
+.cfx-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+@media(max-width:1100px){.cfx-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.cfx-grid{grid-template-columns:1fr}}
+
+/* Card */
+.brand-card{position:relative;background:var(--paper);border:1px solid #e6e2cf;border-radius:22px;overflow:hidden;padding:1.1rem;display:grid;grid-template-columns:98px 1fr;gap:1rem;box-shadow:0 16px 36px rgba(0,0,0,.08);transform:translateY(24px);opacity:0}
+.brand-card .shine{position:absolute;inset:0;background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.35) 45%,transparent 60%);transform:translateX(-120%);}
+.brand-card:hover .shine{animation:shine 1.1s ease}
+@keyframes shine{to{transform:translateX(120%)}}
+.brand-logo{width:98px;height:98px;border-radius:18px;overflow:hidden;background:#f3f8ee;display:grid;place-items:center;border:1px solid #e0ebcf;box-shadow:inset 0 0 0 6px #f7fbf2}
+.brand-body h3{margin:.1rem 0 .2rem;color:var(--ink);font-size:1.25rem}
+.brand-body .muted{color:var(--muted);font-size:.98rem;line-height:1.5}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:.7rem 0}
+.tags span{background:#f0f6e8;color:var(--ink);border:1px solid #dbe7cc;border-radius:999px;padding:.3rem .6rem;font-size:.8rem;font-weight:800}
+.badge{position:absolute;top:12px;right:12px;background:#eef6e6;color:var(--ink);border:1px solid #dbe7cc;border-radius:999px;padding:.25rem .55rem;font-size:.75rem;font-weight:800}
+.badge.ok{background:var(--leaf);color:#fff;border:none;box-shadow:0 10px 20px rgba(78,92,54,.25)}
+
+.btn{display:inline-block;background:var(--leaf);color:#fff;border:none;border-radius:40px;padding:.7rem 1rem;font-weight:800;cursor:pointer;box-shadow:0 10px 22px rgba(78,92,54,.25);transition:.3s;text-decoration:none}
+.btn:hover{transform:translateY(-3px);background:#3d4b2c}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid #dbe7cc;box-shadow:none}
+.btn.ghost:hover{background:#f6fbef}
+
+/* CTA */
+.cfx-cta{margin-top:2.2rem;background:#ffffffaa;border:1px solid #e6e2cf;backdrop-filter:blur(6px);padding:1rem;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;border-radius:18px;align-items:center}
+.cfx-cta .seal{width:44px;height:44px;border-radius:12px;background:var(--leaf);color:#fff;display:grid;place-items:center;font-weight:900;box-shadow:0 10px 18px rgba(78,92,54,.25)}
+.cfx-cta h4{margin:0;color:var(--ink)}
+.cfx-cta p{margin:0;color:var(--muted)}
+
+/* Ambient blobs/leaves */
+.cfx-blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;z-index:1;animation:cfxFloat 10s ease-in-out infinite alternate}
+.cfx-blob.a{top:-120px;left:-90px;width:340px;height:340px;background:#d8f0c8}
+.cfx-blob.b{bottom:-140px;right:-80px;width:360px;height:360px;background:#e8f7da;animation-duration:12s}
+@keyframes cfxFloat{from{transform:translateY(0) scale(1)}to{transform:translateY(40px) scale(1.06)}}
+.cfx-leaf{position:absolute;opacity:.25;font-size:20px;animation:leafDrift 12s linear infinite}
+.cfx-leaf.l1{top:8%;left:8%}
+.cfx-leaf.l2{bottom:12%;right:12%}
+@keyframes leafDrift{from{transform:translateX(0)}to{transform:translateX(40px)}}
+</style>
+
+<script>
+// Namespace
+window.CFX = window.CFX || {};
+
+// Dataset for modal / verification
+CFX.directory = {
+  "soil-association": {
+    title: "Soil Association",
+    type: "Certification",
+    since: 2022,
+    summary: "Annual organic audit across priority SKUs; soil health and pesticide thresholds enforced.",
+    highlights: ["Batch traceability", "Local farm compliance", "Unannounced site checks"],
+    link: "#"
+  },
+  "carbon-trust": {
+    title: "Carbon Trust",
+    type: "Certification",
+    since: 2023,
+    summary: "Product life‑cycle footprinting with 12‑month reduction roadmap and quarterly reviews.",
+    highlights: ["Scope 1–3 coverage", "Delivery route optimization", "Electric fleet pilot"],
+    link: "#"
+  },
+  "fairtrade": {
+    title: "Fairtrade",
+    type: "Certification",
+    since: 2021,
+    summary: "Fair pay policies with supplier empowerment plans and grievance transparency.",
+    highlights: ["Living‑income reference", "Worker committees", "Premium reinvestment"],
+    link: "#"
+  },
+  "green-routes": {
+    title: "GreenRoutes Logistics",
+    type: "Partner",
+    since: 2024,
+    summary: "Low‑emission cold‑chain deliveries with EV and cargo‑bike pilots across UK cities.",
+    highlights: ["EV rollout", "Cold‑chain efficiency", "Route clustering"],
+    link: "#"
+  },
+  "loop-packaging": {
+    title: "Loop Packaging",
+    type: "Partner",
+    since: 2023,
+    summary: "Return‑wash‑reuse containers; closed‑loop packaging with QR tracking.",
+    highlights: ["95% return rate", "Food‑grade wash", "QR traceability"],
+    link: "#"
+  },
+  "local-farmers-uk": {
+    title: "Local Farmers UK",
+    type: "Partner",
+    since: 2020,
+    summary: "Network of regional growers providing seasonal produce with short food miles.",
+    highlights: ["Seasonal menus", "Soil care", "Community grants"],
+    link: "#"
+  }
+};
+
+// Counters
+(function counters(){
+  const nums = document.querySelectorAll('#certs .num');
+  const io = new IntersectionObserver((entries, obs)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target; const target = +el.dataset.target; let cur = 0;
+      const step = Math.max(1, Math.ceil(target/80));
+      const t = setInterval(()=>{ cur += step; if(cur>=target){cur=target; clearInterval(t);} el.textContent = cur.toLocaleString(); }, 20);
+      obs.unobserve(el);
+    });
+  },{threshold:.6});
+  nums.forEach(n=> io.observe(n));
+})();
+
+// Stagger cards reveal
+(function reveal(){
+  const cards = document.querySelectorAll('#certs .brand-card');
+  const io = new IntersectionObserver((entries, obs)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const i = [...cards].indexOf(e.target);
+      setTimeout(()=>{ e.target.style.opacity=1; e.target.style.transform='translateY(0)'; }, i*100);
+      obs.unobserve(e.target);
+    });
+  }, {threshold:.2, rootMargin:'0px 0px -10% 0px'});
+  cards.forEach(c=> io.observe(c));
+})();
+
+// Filter tabs
+(function filters(){
+  const tabs = document.querySelectorAll('#certs .tab');
+  const cards = document.querySelectorAll('#certs .brand-card');
+  tabs.forEach(tab=> tab.addEventListener('click', ()=>{
+    tabs.forEach(t=> t.classList.remove('active'));
+    tab.classList.add('active');
+    const f = tab.dataset.filter;
+    cards.forEach(c=>{
+      const show = f==='all' || c.dataset.type===f;
+      c.style.display = show ? 'grid' : 'none';
+    });
+  }));
+})();
+
+// Modal (lightweight)
+(function modal(){
+  const tpl = (d)=> `\
+    <div class="cfx-modal-backdrop" role="dialog" aria-modal="true">\
+      <div class="cfx-modal">\
+        <button class="close" aria-label="Close">✕</button>\
+        <h3>${d.title} <span class="pill">${d.type}</span></h3>\
+        <p class="muted">Certified since ${d.since}</p>\
+        <p>${d.summary}</p>\
+        <ul class="bullets">${d.highlights.map(h=>`<li>✔️ ${h}</li>`).join('')}</ul>\
+        <div class="modal-actions">\
+          <a href="${d.link}" class="btn" target="_blank" rel="noopener">Verify Badge</a>\
+          <button class="btn ghost" id="confettiBtn">Celebrate</button>\
+        </div>\
+      </div>\
+    </div>`;
+
+  function open(id){
+    const data = CFX.directory[id];
+    if(!data) return;
+    const wrap = document.createElement('div');
+    wrap.innerHTML = tpl(data);
+    document.body.appendChild(wrap.firstElementChild);
+    const back = document.querySelector('.cfx-modal-backdrop');
+    const close = back.querySelector('.close');
+    close.onclick = ()=> back.remove();
+    back.addEventListener('click', e=>{ if(e.target===back) back.remove(); });
+    // mini confetti
+    back.querySelector('#confettiBtn').addEventListener('click', ()=>{
+      for(let i=0;i<60;i++){
+        const p = document.createElement('i');
+        p.className='conf';
+        p.style.left = (50 + (Math.random()*20-10)) + '%';
+        p.style.setProperty('--dx', (Math.random()*200-100)+'px');
+        p.style.setProperty('--dy', (120+Math.random()*80)+'px');
+        back.appendChild(p); setTimeout(()=> p.remove(), 1200);
+      }
+    });
+  }
+
+  document.querySelectorAll('#certs .open-modal').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const card = btn.closest('.brand-card');
+      open(card.dataset.id);
+    });
+  });
+})();
+
+// Download pack (placeholder)
+CFX.downloadPack = function(){
+  const blob = new Blob([`NourishNest Certifications & Partners\n\n- Soil Association\n- Carbon Trust\n- Fairtrade\n- GreenRoutes Logistics\n- Loop Packaging\n- Local Farmers UK`], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'NourishNest_Certifications_Pack.txt';
+  document.body.appendChild(a); a.click(); a.remove();
+};
+</script>
+
+<style>
+/* Modal + confetti */
+.cfx-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(3px);display:grid;place-items:center;z-index:9999}
+.cfx-modal{width:min(700px,92vw);background:#fff;border:1px solid #e6e2cf;border-radius:20px;padding:1.2rem 1.2rem 1.4rem;box-shadow:0 30px 60px rgba(0,0,0,.25);position:relative}
+.cfx-modal h3{margin:.2rem 0 .2rem;font-size:1.4rem;color:#3b2f1e}
+.cfx-modal .pill{margin-left:.5rem;background:#4E5C36;color:#fff;border-radius:999px;padding:.1rem .5rem;font-size:.75rem}
+.cfx-modal .muted{color:#6a5b42}
+.cfx-modal .bullets{margin:.6rem 0 .8rem;padding-left:1rem}
+.cfx-modal .bullets li{margin:.25rem 0;color:#3b2f1e}
+.cfx-modal .close{position:absolute;top:10px;right:10px;border:none;background:#f3f3f0;border-radius:8px;width:32px;height:32px;cursor:pointer}
+.cfx-modal .modal-actions{display:flex;gap:.6rem;flex-wrap:wrap}
+
+.conf{position:absolute;top:50%;transform:translate(-50%,-50%);width:10px;height:10px;background:hsl(calc(360*var(--rand, .5)),60%,60%);border-radius:2px;animation:confetti 1.2s ease-out forwards}
+.conf{--rand:.1}
+@keyframes confetti{0%{opacity:1;transform:translate(-50%,-50%) rotate(0)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(300deg)}}
+</style>
+
+
+<!-- 🌿 Closing Circle — Full Brand Wrap‑Up (drop this near the end of <main>) -->
+<section id="closing-circle" aria-label="Brand wrap-up"
+  class="closing-section">
+  
+  <!-- Soft gradient + decorative blobs -->
+  <div class="closing-bg">
+    <span class="blob a" aria-hidden="true"></span>
+    <span class="blob b" aria-hidden="true"></span>
+    <span class="grain" aria-hidden="true"></span>
+  </div>
+
+  <!-- Title / subtitle -->
+  <header class="closing-header">
+    <h2>Thank you for growing with us</h2>
+    <p>Nourish → Empower → Sustain → Repeat</p>
+  </header>
+
+  <!-- Circle Stack -->
+  <div class="closing-stack">
+    <!-- Outer orbiting badges -->
+    <div class="closing-orbit">
+      <button class="orbit-chip" data-tip="100% Local Produce">🌱</button>
+      <button class="orbit-chip" data-tip="Carbon‑aware logistics">🚚</button>
+      <button class="orbit-chip" data-tip="Eco packaging">♻️</button>
+      <button class="orbit-chip" data-tip="Nutritionist designed">🧑‍⚕️</button>
+    </div>
+
+    <!-- Animated circular manifesto -->
+    <div class="closing-ring">
+      <!-- The words on the ring -->
+      <div class="ring-words" aria-hidden="true">
+        <span>Nourish</span>
+        <span></span>
+        <span>Sustain</span>
+        <span></span>
+      </div>
+
+      <!-- Center Logo / Mark -->
+      <div class="closing-core">
+        <div class="leaf-mark" aria-hidden="true">🥗</div>
+        <strong class="core-title">NourishNest</strong>
+        <small class="core-sub">Mindful • Measured • Modern</small>
+
+        <div class="core-actions">
+          <a href="#plans" class="core-btn primary">Start My Plan</a>
+          <a href="#gallery" class="core-btn ghost">Explore Menu</a>
+        </div>
+      </div>
+
+      <!-- Progress halo (illustrative) -->
+      <svg class="progress-halo" viewBox="0 0 120 120" aria-hidden="true">
+        <defs>
+          <linearGradient id="grad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#9dd08a"/>
+            <stop offset="100%" stop-color="#4E5C36"/>
+          </linearGradient>
+        </defs>
+        <circle cx="60" cy="60" r="54" class="track"/>
+        <circle cx="60" cy="60" r="54" class="bar"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Bottom manifesto lines -->
+  <ul class="closing-manifesto" role="list">
+    <li><span class="dot"></span><em>Every small choice builds a better you.</em></li>
+    <li><span class="dot"></span><em>Every meal builds a better planet.</em></li>
+  </ul>
+
+  <!-- Final CTA -->
+  <div class="closing-cta">
+    <a href="#plans" class="cta-big" id="closingCTA">Join the Movement</a>
+  </div>
+</section>
+
+<style>
+/* =====================
+   Closing Circle Styles
+   (scoped with .closing-*)
+   ===================== */
+:root{ --closing-green:#4E5C36; --closing-foam:#f3faea; --closing-ink:#3b2f1e; }
+
+.closing-section{ position:relative; overflow:hidden; padding:8rem 10% 9rem; background:linear-gradient(180deg,#ffffff 0%, #f7fbf1 100%); border-top:2px solid #e6dcc1; text-align:center; }
+
+.closing-bg .blob{ position:absolute; border-radius:50%; filter:blur(60px); opacity:.35; pointer-events:none; }
+.closing-bg .blob.a{ width:360px; height:360px; top:-120px; left:-90px; background:#e3f7d4; animation:closingFloat 10s ease-in-out infinite alternate; }
+.closing-bg .blob.b{ width:420px; height:420px; bottom:-160px; right:-120px; background:#cfeec1; animation:closingFloat 12s ease-in-out infinite alternate-reverse; }
+
+/* subtle film grain to add texture */
+.closing-bg .grain{ position:absolute; inset:-10%; mix-blend:overlay; opacity:.06; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 10 10"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="10" height="10" filter="url(%23n)" opacity=".45"/></svg>'); }
+
+@keyframes closingFloat{ from{ transform:translateY(0) scale(1); } to{ transform:translateY(40px) scale(1.06);} }
+
+.closing-header h2{ font-size:2.6rem; color:var(--closing-ink); font-weight:800; letter-spacing:.2px; }
+.closing-header p{ color:#5b4d38; font-size:1.05rem; margin-top:.35rem; }
+
+/* ====== Stack ====== */
+.closing-stack{ position:relative; display:grid; place-items:center; margin-top:2.6rem; }
+
+/* Orbit chips */
+.closing-orbit{ position:relative; width:min(720px,80vw); height:min(720px,80vw); max-width:720px; max-height:720px; min-width:300px; min-height:300px; display:grid; place-items:center; }
+.orbit-chip{ position:absolute; width:62px; height:62px; border-radius:999px; border:1px solid #dbe7cc; background:#fff; display:grid; place-items:center; font-size:1.35rem; box-shadow:0 12px 30px rgba(0,0,0,.08); cursor:pointer; transition:.25s; }
+.orbit-chip:hover{ transform:translateY(-4px) scale(1.06); }
+/* positions around the circle */
+.orbit-chip:nth-child(1){ top:2%; left:50%; transform:translate(-50%,0); }
+.orbit-chip:nth-child(2){ right:2%; top:50%; transform:translate(0,-50%); }
+.orbit-chip:nth-child(3){ bottom:2%; left:50%; transform:translate(-50%,0); }
+.orbit-chip:nth-child(4){ left:2%; top:50%; transform:translate(0,-50%); }
+
+/* Ring container */
+.closing-ring{ position:absolute; width:68%; max-width:520px; aspect-ratio:1/1; border-radius:50%; display:grid; place-items:center; }
+
+/* Progress halo */
+.progress-halo{ position:absolute; inset:0; transform:rotate(-90deg); }
+.progress-halo .track{ fill:none; stroke:#e6efd9; stroke-width:4; }
+.progress-halo .bar{ fill:none; stroke:url(#grad); stroke-width:6; stroke-linecap:round; stroke-dasharray:339.292; /* 2πr where r=54 */ stroke-dashoffset:339.292; transition:stroke-dashoffset 1.2s ease; }
+
+/* Rotating words around the ring */
+.ring-words{ position:absolute; inset:0; border-radius:50%; display:grid; place-items:center; animation:spin 22s linear infinite; }
+.ring-words span{ position:absolute; color:var(--closing-green); font-weight:800; letter-spacing:.5px; text-transform:uppercase; font-size:clamp(.7rem, 1.4vw, .95rem); }
+.ring-words span:nth-child(1){ top:-10px; left:50%; transform:translate(-50%); }
+.ring-words span:nth-child(2){ right:-10px; top:50%; transform:translateY(-50%) rotate(90deg); transform-origin:center; }
+.ring-words span:nth-child(3){ bottom:-10px; left:50%; transform:translate(-50%) rotate(180deg); }
+.ring-words span:nth-child(4){ left:-10px; top:50%; transform:translateY(-50%) rotate(-90deg); }
+
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* Core content */
+.closing-core{ position:relative; background:#fff; border:1px solid #e6e2cf; width:min(420px,80%); aspect-ratio:1/1; border-radius:30px; box-shadow:0 20px 44px rgba(0,0,0,.08); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.4rem; isolation:isolate; }
+.closing-core::before{ content:""; position:absolute; inset:-2px; border-radius:32px; padding:2px; background:conic-gradient(from 0deg, #88a86b, #cfeec1, #88a86b); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; opacity:.45; animation:spin 8s linear infinite; }
+.leaf-mark{ font-size:2.1rem; margin-bottom:.3rem; }
+.core-title{ font-size:1.5rem; color:var(--closing-ink); letter-spacing:.2px; }
+.core-sub{ margin-top:.25rem; color:#6a5b42; }
+.core-actions{ display:flex; gap:.6rem; margin-top:1.1rem; flex-wrap:wrap; justify-content:center; }
+.core-btn{ position:relative; display:inline-block; text-decoration:none; border-radius:40px; font-weight:800; padding:.85rem 1.2rem; box-shadow:0 10px 24px rgba(78,92,54,.18); transition:.25s; }
+.core-btn.primary{ background:var(--closing-green); color:#fff; }
+.core-btn.ghost{ background:#fff; color:var(--closing-ink); border:1px solid #dbe7cc; box-shadow:none; }
+.core-btn:hover{ transform:translateY(-3px); }
+
+/* Tooltip for orbit chips */
+.orbit-chip::after{ content:attr(data-tip); position:absolute; bottom:72px; left:50%; transform:translateX(-50%) translateY(8px); background:#2f2f2f; color:#fff; padding:.4rem .6rem; border-radius:8px; font-size:.8rem; white-space:nowrap; opacity:0; pointer-events:none; transition:.2s; }
+.orbit-chip:hover::after{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* Lines */
+.closing-manifesto{ display:grid; gap:.6rem; margin:2.2rem auto 0; max-width:720px; color:#5b4d38; }
+.closing-manifesto .dot{ width:8px; height:8px; border-radius:50%; background:var(--closing-green); display:inline-block; margin-right:.5rem; box-shadow:0 0 0 6px rgba(78,92,54,.08); }
+
+/* Final CTA */
+.closing-cta{ margin-top:2rem; }
+.cta-big{ display:inline-block; background:var(--closing-green); color:#fff; font-weight:900; letter-spacing:.3px; text-decoration:none; padding:1.05rem 1.8rem; border-radius:999px; box-shadow:0 16px 36px rgba(78,92,54,.28); transition:.25s; position:relative; overflow:hidden; }
+.cta-big:hover{ transform:translateY(-3px); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .ring-words, .closing-core::before, .progress-halo, .closing-bg .blob{ animation:none !important; }
+}
+
+/* Responsive */
+@media (max-width:820px){ .closing-core{ width:min(360px,86%);} .orbit-chip{ width:56px;height:56px;font-size:1.2rem } }
+@media (max-width:520px){ .closing-orbit{ width:86vw;height:86vw } .closing-header h2{ font-size:2.2rem } }
+</style>
+
+<script>
+// =====================
+// Closing Circle Scripts
+// =====================
+(function(){
+  const section = document.getElementById('closing-circle');
+  if(!section) return;
+
+  const bar = section.querySelector('.progress-halo .bar');
+  const circumference = 2 * Math.PI * 54; // r=54 (matches CSS comment)
+  let progress = 0;
+
+  // Animate progress when visible
+  const onView = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        // progress animates from 0 -> 85%
+        progress = 0.85;
+        const offset = circumference * (1 - progress);
+        bar.style.strokeDashoffset = offset.toFixed(2);
+      }
+    });
+  }, {threshold:.35});
+  onView.observe(section);
+
+  // Orbit chips: gentle perpetual rotation using CSS variables
+  const orbit = section.querySelector('.closing-orbit');
+  let rot = 0; let raf;
+  function spin(){ rot = (rot + 0.05) % 360; orbit.style.transform = `rotate(${rot}deg)`; raf = requestAnimationFrame(spin); }
+  const onOrbitView = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ raf = requestAnimationFrame(spin);} else { cancelAnimationFrame(raf);} });
+  },{threshold:.1});
+  onOrbitView.observe(orbit);
+
+  // Parallax on mouse move
+  section.addEventListener('pointermove', (ev)=>{
+    const {clientX:x, clientY:y} = ev;
+    const rect = section.getBoundingClientRect();
+    const cx = x - rect.left, cy = y - rect.top;
+    const dx = (cx/rect.width - .5) * 10; // -5..5
+    const dy = (cy/rect.height - .5) * 10; // -5..5
+    section.querySelectorAll('.blob').forEach((b,i)=>{
+      b.style.transform = `translate(${dx*(i?1.2:1)}px, ${dy*(i?1.2:1)}px)`;
+    });
+  });
+
+  // CTA ripple + confetti leaves
+  const cta = document.getElementById('closingCTA');
+  cta?.addEventListener('click', (e)=>{
+    // ripple
+    const r = document.createElement('span');
+    r.style.position='absolute'; r.style.inset='0'; r.style.borderRadius='999px';
+    r.style.boxShadow='0 0 0 0 rgba(78,92,54,.4)'; r.style.transition='box-shadow .7s ease';
+    cta.appendChild(r); requestAnimationFrame(()=> r.style.boxShadow='0 0 0 22px rgba(78,92,54,0)');
+    setTimeout(()=> r.remove(), 750);
+
+    // confetti leaves
+    for(let i=0;i<14;i++){
+      const leaf=document.createElement('div');
+      leaf.className='leaf-fetti';
+      leaf.textContent='🍃';
+      leaf.style.left=(e.clientX - section.getBoundingClientRect().left)+'px';
+      leaf.style.top=(e.clientY - section.getBoundingClientRect().top)+'px';
+      section.appendChild(leaf);
+      setTimeout(()=> leaf.remove(), 1600);
+    }
+  });
+})();
+</script>
+
+<style>
+/* Mini confetti leaves */
+.leaf-fetti{ position:absolute; font-size:1.1rem; animation:leafOut 1.6s ease forwards; }
+@keyframes leafOut{ 0%{ transform:translate(0,0) rotate(0); opacity:1 }
+ 100%{ transform:translate(var(--dx, 60px), var(--dy, -80px)) rotate(140deg); opacity:0 } }
+/* Randomize displacement for each confetti leaf */
+.leaf-fetti{ --dx: calc((random(var(--r1)) - .5) * 160px); --dy: calc((random(var(--r2)) - .2) * -160px); }
+/* Fallback since CSS random() isn't widely supported; JS sets positions by motion */
+</style>
+
+<script>
+// Fallback random motion for leaf-fetti since CSS random() isn't cross‑browser
+(function(){
+  const root = document;
+  root.addEventListener('animationstart', (e)=>{
+    if(!e.target.classList || !e.target.classList.contains('leaf-fetti')) return;
+    const el = e.target;
+    const dx = (Math.random() - .5) * 160;
+    const dy = (Math.random() - .2) * -160;
+    el.style.setProperty('--dx', dx+'px');
+    el.style.setProperty('--dy', dy+'px');
+  }, true);
+})();
+</script>
+  </main>
+
+  <!-- =================== LOGIN PAGE (route: #login) =================== -->
+<section id="loginPage" aria-label="Login">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div>
+        <div class="login-title">Welcome to NourishNest</div>
+        <div class="login-sub">Healthy living begins here — log in to continue.</div>
+      </div>
+
+      <label class="helper" for="authEmail">Email</label>
+      <input id="authEmail" type="email" class="input" placeholder="you@example.com"/>
+
+      <label class="helper" for="authPass">Password</label>
+      <input id="authPass" type="password" class="input" placeholder="••••••••"/>
+
+      <div class="btn-row">
+        <button id="loginBtn"  class="btn btn-primary">Login</button>
+        <button id="signupBtn" class="btn btn-ghost">Create account</button>
+        <button id="googleBtn" class="btn btn-google">Continue with Google</button>
+      </div>
+
+      <div class="helper" id="authStatus" aria-live="polite"></div>
+      <div class="helper">
+        Trouble logging in? <a href="#home" style="color:#4E5C36;font-weight:800;">Return home</a>
+      </div>
+    </div>
+
+   <aside class="login-aside">
+  <!-- Small image on top of the text -->
+  <div class="aside-image">
+    <img src="https://i.postimg.cc/SRdzCZJq/Login-Picture.png" 
+         alt="Healthy bowl of food">
+  </div>
+
+  <div class="aside-content">
+    <span class="aside-badge">NourishNest</span>
+    <div class="aside-title">Healthy, effortless eating</div>
+    <div class="aside-list">
+      <span>• Nutritionist-designed menus</span>
+      <span>• Flexible weekly plans</span>
+      <span>• Pause or cancel anytime</span>
+    </div>
+  </div>
+  <div class="aside-leaf"></div>
+  <div class="login-brand">🥗 NourishNest</div>
+</aside>
+
+  </div>
+</section>
+
+<style>
+/* Layout */
+
+/* --- Right Side Image --- */
+.aside-image {
+  text-align: center;
+  margin-bottom: 1.8rem;
+}
+.aside-image img {
+  width: 380px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border: 2px solid #e2ecd1;
+}
+
+#loginPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #f7fbe9, #fffef7);
+  font-family: 'Inter', sans-serif;
+  color: #3b2f1e;
+}
+
+.login-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  max-width: 900px;
+  width: 100%;
+}
+
+.login-card {
+  padding: 3rem 2.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-title {
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.login-sub {
+  font-size: 1rem;
+  color: #5c4d39;
+  margin-bottom: 2rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.9rem;
+  margin-bottom: 1.2rem;
+  border-radius: 10px;
+  border: 1.8px solid #d6e4c2;
+  background: #fffefb;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4E5C36;
+  box-shadow: 0 0 0 3px rgba(78, 92, 54, 0.15);
+}
+
+/* Fixed Buttons */
+.btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+}
+
+.btn {
+  padding: 0.9rem;
+  border-radius: 40px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+/* Primary CTA */
+.btn-primary {
+  background: linear-gradient(135deg, #4E5C36, #7a9650);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(78, 92, 54, 0.25);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #3b4929, #668a42);
+}
+
+/* Ghost Button - Now properly visible */
+.btn-ghost {
+  background: #f1f6ea;
+  color: #3b2f1e;
+  border: 1.5px solid #a9b98f;
+  box-shadow: 0 3px 8px rgba(169, 185, 143, 0.3);
+}
+.btn-ghost:hover {
+  background: #e5f0d6;
+  transform: translateY(-2px);
+}
+
+/* Google Button */
+.btn-google {
+  background: #fff;
+  color: #444;
+  border: 1.5px solid #ccc;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+.btn-google:hover {
+  background: #f8f8f8;
+}
+
+/* Status & Helper Text */
+.helper {
+  font-size: 0.9rem;
+  color: #5c4d39;
+  margin-top: 0.4rem;
+}
+
+/* Aside Section */
+.login-aside {
+  background: linear-gradient(135deg, #f7fceb, #fefdf7);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 2.5rem;
+  position: relative;
+  text-align: left;
+}
+.aside-badge {
+  background: #4E5C36;
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+.aside-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.aside-list span {
+  display: block;
+  color: #3b2f1e;
+  margin-bottom: 0.3rem;
+}
+.login-brand {
+  font-weight: 700;
+  color: #3b2f1e;
+  font-size: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+/* Responsiveness */
+@media (max-width: 820px) {
+  .login-wrap {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+  }
+  .login-aside {
+    display: none;
+  }
+}
+</style>
+
+  <!-- ===== SHOPPING CART DRAWER (global) ===== -->
+  <aside id="cartDrawer" aria-label="Shopping Cart">
+    <div id="cartHeader">
+      <h2 style="color:#3b2f1e;">Your Cart</h2>
+      <button id="closeCart" class="qty-btn" title="Close">✕</button>
+    </div>
+    <div id="cartList">
+      <div id="emptyMsg">Your basket is empty.</div>
+    </div>
+    <div id="cartFooter">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:.5rem 0 1rem;">
+        <strong>Total:</strong>
+        <strong>£<span id="cartTotal">0</span>/week</strong>
+      </div>
+      <button id="checkoutBtn" class="btn btn-primary" style="width:100%;padding:1rem;border:none;border-radius:999px;background:#4E5C36;color:#fff;cursor:pointer;font-weight:800;">Proceed to Checkout</button>
+      <p id="loginHint" style="margin-top:.6rem;color:#6b5b3e;font-size:.9rem;display:none;">Please log in to checkout.</p>
+    </div>
+  </aside>
+
+  <!-- Floating Cart Toggle (shows only when logged in) -->
+  <button id="cartToggle">🛒 Cart</button>
+
+  <!-- =================== FOOTER =================== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-about">
+        <h3>NourishNest</h3>
+        <p>Bringing balance to your plate and peace to your lifestyle.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#gallery">Resources</a></li>
+          <li><a href="#plans">Plans</a></li>
+          <li><a href="#contact-page">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Connect With Us</h4>
+        <p>Email: support@nourishnest.com</p>
+        <div class="socials"><a href="#">FB</a><a href="#">IG</a><a href="#">TW</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 NourishNest. All Rights Reserved.</div>
+  </footer>
+
+
+
+  <!-- =================== JS: UI Essentials =================== -->
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll',()=>{
+      const navbar=document.getElementById('navbar');
+      if(window.scrollY>60) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled');
+    });
+
+    // Featured slideshow
+    const slides=document.querySelectorAll('.slide'); let slideIdx=0;
+    setInterval(()=>{ if(!slides.length) return; slides[slideIdx].classList.remove('active'); slideIdx=(slideIdx+1)%slides.length; slides[slideIdx].classList.add('active'); },4000);
+
+    // Gallery filter (works with upgraded cards)
+    const searchInput=document.getElementById('searchFood');
+    const filterSelect=document.getElementById('filterCategory');
+    const foodCards=()=>document.querySelectorAll('.food-card');
+    function filterFoods(){
+      const searchTerm=(searchInput?.value||'').toLowerCase();
+      const filter=filterSelect?.value||'all';
+      foodCards().forEach(card=>{
+        const title=(card.querySelector('h4')?.textContent||'').toLowerCase();
+        const category=card.dataset.category;
+        card.style.display=((filter==='all'||filter===category)&&title.includes(searchTerm))?'block':'none';
+      });
+    }
+    searchInput?.addEventListener('input',filterFoods);
+    filterSelect?.addEventListener('change',filterFoods);
+
+    // Toast
+    const toast=(msg)=>{
+      const el=document.createElement('div');
+      el.className='toast show';
+      el.textContent=msg;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),1400);
+    }
+  </script>
+
+  <!-- =================== Router: #login shows login page =================== -->
+  <script>
+    function ensureFooterLast(){
+      const f=document.querySelector('footer.footer');
+      if(f && f.parentElement.lastElementChild!==f){ document.body.appendChild(f); }
+    }
+    function applyRoute(){
+      const isLogin=location.hash.replace('#','')==='login';
+      document.body.classList.toggle('route-login',isLogin);
+      ensureFooterLast();
+    }
+    window.addEventListener('hashchange',applyRoute);
+    document.addEventListener('DOMContentLoaded',applyRoute);
+  </script>
+
+  <!-- =================== Firebase (Compat) =================== -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig={
+      apiKey:"AIzaSyCZ33Jrn9NYfV1TbaIOVIk-ac1tpn7hOio",
+      authDomain:"nourishnest-ddc95.firebaseapp.com",
+      projectId:"nourishnest-ddc95",
+      storageBucket:"nourishnest-ddc95.firebasestorage.app",
+      messagingSenderId:"290779245893",
+      appId:"1:290779245893:web:a2e82a83d778a5bbe5222c",
+      measurementId:"G-RC455RNF3Q"
+    };
+    try{firebase.initializeApp(firebaseConfig);}catch(_){}
+    const auth=firebase.auth();
+  </script>
+
+  <!-- =================== Auth UI + Cart + Plans Toggle =================== -->
+  <script>
+    const $=(s,r=document)=>r.querySelector(s);
+
+    /* -------- Login actions -------- */
+    document.addEventListener('DOMContentLoaded',()=>{
+      const emailEl=$('#authEmail');
+      const passEl=$('#authPass');
+      const status=$('#authStatus');
+
+      $('#loginBtn')?.addEventListener('click',async(e)=>{
+        e.preventDefault();
+        status.textContent='Signing in...';
+        try{
+          await auth.signInWithEmailAndPassword(emailEl.value,passEl.value);
+          status.textContent='Welcome back!'; location.hash='home'; toast('Logged in');
+        }catch(e){ status.textContent=e.message; toast('Login failed'); }
+      });
+
+      $('#signupBtn')?.addEventListener('click',async(e)=>{
+        e.preventDefault();
+        status.textContent='Creating account...';
+        try{
+          await auth.createUserWithEmailAndPassword(emailEl.value,passEl.value);
+          status.textContent='Account created. You are now signed in.'; location.hash='home'; toast('Signed up');
+        }catch(e){ status.textContent=e.message; toast('Signup failed'); }
+      });
+
+      $('#googleBtn')?.addEventListener('click',async(e)=>{
+        e.preventDefault();
+        status.textContent='Opening Google...';
+        try{
+          const provider=new firebase.auth.GoogleAuthProvider();
+          await auth.signInWithPopup(provider);
+          status.textContent='Signed in with Google.'; location.hash='home'; toast('Google sign-in ok');
+        }catch(e){ status.textContent=e.message; toast('Google sign-in failed'); }
+      });
+    });
+
+    // Navbar Login toggles to Logout when authenticated, cart toggle visibility
+    function updateNavForUser(user){
+      const loginLink=document.getElementById('loginCta');
+      const cartBtn=document.getElementById('cartToggle');
+      if(!loginLink) return;
+      if(user){
+        loginLink.textContent='Logout'; loginLink.href='#home';
+        loginLink.onclick=(e)=>{e.preventDefault(); auth.signOut().then(()=>toast('Logged out'));};
+        cartBtn.style.display='inline-flex';
+      }else{
+        loginLink.textContent='Login'; loginLink.href='#login'; loginLink.onclick=null;
+        closeCart();
+        cartBtn.style.display='none';
+      }
+      loadCartForUser(user);
+      renderCart();
+    }
+    auth.onAuthStateChanged(updateNavForUser);
+
+    /* -------- Cart state (per-user) -------- */
+    let cart = []; // [{plan, price, qty}]
+    function storageKey(uid){ return `nn_cart_${uid||'anon'}`; }
+    function saveCart(){
+      const uid = auth.currentUser?.uid || 'anon';
+      localStorage.setItem(storageKey(uid), JSON.stringify(cart));
+    }
+    function loadCartForUser(user){
+      const uid = user?.uid || 'anon';
+      try{
+        const raw = localStorage.getItem(storageKey(uid));
+        cart = raw ? JSON.parse(raw) : [];
+      }catch{ cart = []; }
+    }
+
+    /* -------- Cart UI helpers -------- */
+    const cartDrawer = $('#cartDrawer');
+    const cartList   = $('#cartList');
+    const cartTotal  = $('#cartTotal');
+    const loginHint  = $('#loginHint');
+
+    function currency(n){ return Number(n).toFixed(2).replace(/\.00$/,''); }
+
+    function renderCart(){
+      cartList.innerHTML = '';
+      if(!cart.length){
+        cartList.innerHTML = '<div id="emptyMsg">Your basket is empty.</div>';
+      } else {
+        cart.forEach((item, idx) => {
+          const row = document.createElement('div');
+          row.className = 'cart-row';
+          row.innerHTML = `
+            <div style="flex:1">
+              <div class="cart-title">${item.plan}</div>
+              <div style="color:#4E5C36;">£${currency(item.price)}/week</div>
+            </div>
+            <div class="qty-wrap">
+              <button class="qty-btn" aria-label="Decrease" data-idx="${idx}" data-op="-">-</button>
+              <span>${item.qty}</span>
+              <button class="qty-btn" aria-label="Increase" data-idx="${idx}" data-op="+">+</button>
+            </div>
+            <button class="remove-btn" aria-label="Remove" data-remove="${idx}">X</button>
+          `;
+          cartList.appendChild(row);
+        });
+      }
+
+      const total = cart.reduce((sum,i)=> sum + (Number(i.price)*i.qty), 0);
+      cartTotal.textContent = currency(total);
+
+      // Bind qty & remove
+      cartList.querySelectorAll('.qty-btn').forEach(btn=>{
+        btn.onclick = ()=>{
+          const i = Number(btn.dataset.idx);
+          const op = btn.dataset.op;
+          if(op==='+') cart[i].qty += 1;
+          else cart[i].qty = Math.max(1, cart[i].qty - 1);
+          saveCart(); renderCart();
+        };
+      });
+      cartList.querySelectorAll('[data-remove]').forEach(btn=>{
+        btn.onclick = ()=>{
+          const i = Number(btn.dataset.remove);
+          cart.splice(i,1);
+          saveCart(); renderCart();
+        };
+      });
+    }
+
+    function openCart(){ 
+      if(!auth.currentUser){ toast('Please login to view your cart'); location.hash='#login'; return; }
+      cartDrawer.classList.add('open'); 
+    }
+    function closeCart(){ cartDrawer.classList.remove('open'); }
+
+    $('#cartToggle').onclick = openCart;
+    $('#closeCart').onclick = closeCart;
+
+    /* -------- Add to cart from Plans -------- */
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.querySelectorAll('.pricing-btn').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          e.preventDefault();
+          if(!auth.currentUser){
+            toast('Please login first'); location.hash = '#login'; return;
+          }
+          const plan = btn.dataset.plan;
+          const price = Number(btn.dataset.price||0);
+          const existing = cart.find(i=>i.plan===plan && Number(i.price)===price);
+          if(existing){ existing.qty += 1; }
+          else { cart.push({plan, price, qty:1}); }
+          saveCart(); renderCart(); openCart(); toast(`${plan} added`);
+        });
+      });
+    });
+
+    /* -------- Checkout -------- */
+   /* -------- Checkout -------- */
+$('#checkoutBtn').onclick = ()=>{
+  if(!auth.currentUser){
+    toast('Please login first');
+    location.hash='#login';
+    return;
+  }
+
+  if(!cart.length){
+    toast('Your basket is empty');
+    return;
+  }
+
+  // Get the first plan in the cart (you only allow 1 plan at a time)
+  const item = cart[0];
+  const planName = item.plan;
+
+  // Stripe checkout URLs
+  const stripeLinks = {
+    "Starter Nest": "https://buy.stripe.com/test_8x2cN5b6RafndoN05T4AU02",
+    "Healthy Nest": "https://buy.stripe.com/test_eVq8wP3Ep0EN3Od19X4AU01",
+    "Family Nest": "https://buy.stripe.com/test_14A14n4It2MVdoNf0N4AU00"
+  };
+
+  const checkoutUrl = stripeLinks[planName];
+
+  if(!checkoutUrl){
+    toast("Error: Unknown plan");
+    return;
+  }
+
+  toast(`Redirecting to Stripe for ${planName}...`);
+  setTimeout(()=>{
+  window.location.href = checkoutUrl + "?prefilled_email=" + auth.currentUser.email;
+},800);
+
+};
+
+/* ---- SUBSCRIPTION ACCESS CONTROL ---- */
+function userHasPlan() {
+  const uid = auth.currentUser?.uid;
+  if (!uid) return false;
+  return localStorage.getItem(`nn_has_plan_${uid}`) === "true";
+}
+
+function lockGallery(lock) {
+  const grid = document.getElementById("foodGrid");
+  const viewAll = document.querySelector(".view-all");
+  if (!grid) return;
+
+  if (lock) {
+    grid.classList.add("gallery-locked");
+    viewAll?.classList.add("locked");
+  } else {
+    grid.classList.remove("gallery-locked");
+    viewAll?.classList.remove("locked");
+  }
+}
+
+// Stripe success flag detection
+window.addEventListener("load", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("payment") === "success" && auth.currentUser) {
+    localStorage.setItem(`nn_has_plan_${auth.currentUser.uid}`, "true");
+    toast("✅ Plan activated — full menu unlocked!");
+    lockGallery(false);
+  }
+});
+
+// Check active user state
+auth.onAuthStateChanged(() => {
+  lockGallery(!userHasPlan());
+});
+
+// Block view all button when locked
+document.getElementById("viewAllBtn").addEventListener("click", (e) => {
+  if (!auth.currentUser) {
+    e.preventDefault();
+    toast("Please login to continue");
+    location.hash = "#login";
+    return;
+  }
+
+  if (!userHasPlan()) {
+    e.preventDefault();
+    toast("Purchase a plan to unlock the full menu 🥗");
+    location.hash = "#plans";
+  }
+});
+
+
+    /* -------- Initialize cart on load -------- */
+    document.addEventListener('DOMContentLoaded', ()=>{
+      loadCartForUser(auth.currentUser);
+      renderCart();
+      loginHint.style.display = auth.currentUser ? 'none' : 'block';
+    });
+    auth.onAuthStateChanged((u)=>{ loginHint.style.display = u ? 'none' : 'block'; });
+
+    /* -------- Plans: Weekly/Monthly toggle (display only) -------- */
+    const weeklyBtn = document.getElementById('weeklyBtn');
+    const monthlyBtn = document.getElementById('monthlyBtn');
+    function setBilling(mode){
+      document.querySelectorAll('[data-weekly]').forEach(span=>{
+        const weekly = Number(span.getAttribute('data-weekly'));
+        const monthly = Number(span.getAttribute('data-monthly'));
+        span.textContent = '£' + (mode==='monthly' ? monthly : weekly);
+      });
+      document.querySelectorAll('.pricing-btn').forEach(btn=>{
+        const base = Number(btn.getAttribute('data-price'));
+        const monthly = (base * 0.9).toFixed(2);
+        btn.setAttribute('data-price', mode==='monthly' ? monthly : base);
+      });
+    }
+    weeklyBtn?.addEventListener('click',()=>{
+      weeklyBtn.classList.add('active'); monthlyBtn.classList.remove('active');
+      setBilling('weekly');
+    });
+    monthlyBtn?.addEventListener('click',()=>{
+      monthlyBtn.classList.add('active'); weeklyBtn.classList.remove('active');
+      setBilling('monthly');
+    });
+
+    
+  </script>
+
+  <script>
+// Scroll-spy for nav links
+document.addEventListener("DOMContentLoaded", () => {
+  const sections = document.querySelectorAll("section[id]");
+  const navLinks = document.querySelectorAll(".nav-links a");
+
+  function activateMenu() {
+    let scrollPosition = window.scrollY + 120; // offset for fixed navbar
+
+    sections.forEach(section => {
+      let top = section.offsetTop;
+      let height = section.offsetHeight;
+      let id = section.getAttribute("id");
+
+      if (scrollPosition >= top && scrollPosition < top + height) {
+        navLinks.forEach(link => link.classList.remove("active"));
+        
+        const activeLink = document.querySelector(`.nav-links a[href="#${id}"]`);
+        if (activeLink) activeLink.classList.add("active");
+      }
+    });
+  }
+
+  window.addEventListener("scroll", activateMenu);
+  activateMenu();
+});
+
+document.querySelectorAll(".faq-item").forEach(item => {
+  item.addEventListener("click", () => {
+    item.classList.toggle("open");
+  });
+});
+
+</script>
+
+
+<script>
+(function(){
+  const scenes = document.querySelectorAll('.xpl-scene');
+  const railFill = document.getElementById('xplRailFill');
+  const railSteps = document.querySelectorAll('.xpl-rail-steps li');
+
+  // Lazy image loader
+  const lazyImgs = document.querySelectorAll('.xpl-img.lazy');
+  const lazyIO = 'IntersectionObserver' in window ? new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const img = e.target;
+      const src = img.getAttribute('data-src');
+      if(!src) return;
+      img.src = src;
+      img.onload = ()=> img.classList.add('loaded');
+      lazyIO.unobserve(img);
+    })
+  }, {rootMargin:'200px'}) : null;
+  lazyImgs.forEach(img=> lazyIO ? lazyIO.observe(img) : (img.src = img.dataset.src));
+
+  // Scene observer for entrance + progress link
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const idx = [...scenes].indexOf(entry.target);
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-inview');
+        // Update rail active step
+        railSteps.forEach((li,i)=> li.classList.toggle('is-active', i===idx));
+      }
+    });
+    updateRail();
+  }, {threshold:.55});
+  scenes.forEach(s=> io.observe(s));
+
+  // Progress calculation
+  function updateRail(){
+    const docH = document.body.scrollHeight - window.innerHeight;
+    const p = Math.max(0, Math.min(1, window.scrollY / (docH||1)));
+    if(railFill) railFill.style.height = (p * 100) + '%';
+  }
+  window.addEventListener('scroll', updateRail);
+  updateRail();
+
+  // Mouse parallax on images
+  const stage = document.querySelector('.xpl-stage');
+  if(stage && window.matchMedia('(hover:hover)').matches){
+    stage.addEventListener('mousemove', (e)=>{
+      const rect = stage.getBoundingClientRect();
+      const cx = (e.clientX - rect.left) / rect.width - .5;
+      const cy = (e.clientY - rect.top) / rect.height - .5;
+      document.querySelectorAll('.xpl-img.loaded').forEach(img=>{
+        img.style.transform = `translate(${cx*6}px, ${cy*6}px) scale(1.01)`;
+      });
+      document.querySelectorAll('.xpl-bg').forEach(bg=>{
+        bg.style.transform = `translate(${cx*-10}px, ${cy*-10}px) scale(1.03)`;
+      });
+    });
+    stage.addEventListener('mouseleave', ()=>{
+      document.querySelectorAll('.xpl-img').forEach(img=> img.style.transform='');
+      document.querySelectorAll('.xpl-bg').forEach(bg=> bg.style.transform='');
+    });
+  }
+})();
+</script>
+<script>
+document.querySelectorAll('.open-login').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('main, footer, header, section:not(#loginPage)')
+            .forEach(sec => sec.style.display = 'none');
+    document.getElementById('loginPage').classList.add('active');
+    window.scrollTo(0, 0);
+  });
+});
+</script>
+
+<!-- =================== 404 PAGE (Triggered by Double Home Click) =================== -->
+<section id="error404" class="error-page">
+  <canvas id="leafField"></canvas>
+  <div class="error-container">
+    <h1>404</h1>
+    <h2>Oops — you clicked Home a bit too eagerly 🍃</h2>
+    <p>Looks like you took a detour! Let’s get you back on track.</p>
+    <div class="cta-group">
+      <a href="#home" class="btn-return">Try Again</a>
+    </div>
+  </div>
+</section>
+
+<style>
+/* =================== 404 Page Styling =================== */
+#error404 {
+  display: none;
+  height: 100vh;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(180deg,#f7fbe9 0%,#fffef7 100%);
+  overflow: hidden;
+  font-family: 'Inter',sans-serif;
+  color: #3b2f1e;
+  align-items: center;
+  justify-content: center;
+}
+#error404.active { display: flex; }
+
+#error404 canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.error-container {
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+  text-align: center;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  animation: fadeIn 0.8s ease forwards;
+}
+.error-container h1 {
+  font-size: 6rem;
+  color: #4E5C36;
+  margin-bottom: .4rem;
+}
+.error-container h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #3b2f1e;
+  margin-bottom: .8rem;
+}
+.error-container p {
+  font-size: 1rem;
+  color: #5c4d39;
+  margin-bottom: 1.8rem;
+}
+.cta-group .btn-return {
+  background: linear-gradient(135deg,#4E5C36,#7a9650);
+  color: #fff;
+  padding: .8rem 1.8rem;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(78,92,54,.3);
+  transition: all .3s ease;
+}
+.cta-group .btn-return:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg,#3b4929,#668a42);
+}
+@keyframes fadeIn {
+  from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);}
+}
+</style>
+
+<script>
+/* =================== DOUBLE HOME CLICK → 404 PAGE =================== */
+let homeClickCount = 0;
+const homeBtn = document.querySelector('a[href="#home"]');
+const errorPage = document.getElementById('error404');
+
+if (homeBtn && errorPage) {
+  homeBtn.addEventListener('click', e => {
+    homeClickCount++;
+    // second click within 2.5s triggers 404
+    if (homeClickCount === 2) {
+      e.preventDefault();
+      show404();
+      localStorage.setItem('nourish_404_shown', 'true');
+      homeClickCount = 0;
+    }
+    setTimeout(()=>homeClickCount=0,2500);
+  });
+}
+
+function show404(){
+  document.querySelectorAll('main,header,footer,section:not(#error404)')
+          .forEach(el=>el.style.display='none');
+  errorPage.classList.add('active');
+  setTimeout(()=>hide404(),20000);
+
+  leafFall();
+}
+
+function hide404(){
+  document.querySelectorAll('main,header,footer,section:not(#error404)')
+          .forEach(el=>el.style.display='');
+  errorPage.classList.remove('active');
+}
+
+/* ====== Reset on refresh ====== */
+if (localStorage.getItem('nourish_404_shown') === 'true') {
+  hide404();
+  localStorage.removeItem('nourish_404_shown');
+}
+
+/* ====== Leaf Canvas Animation ====== */
+function leafFall(){
+  const canvas=document.getElementById('leafField');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  let W,H; function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  window.addEventListener('resize',resize); resize();
+
+  const leaves=Array.from({length:25},()=>({
+    x:Math.random()*W,
+    y:Math.random()*H,
+    r:Math.random()*18+10,
+    d:Math.random()*1+0.5,
+    emoji:["🍃","🌿","🍂"][Math.floor(Math.random()*3)]
+  }));
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.font='28px serif';
+    leaves.forEach(l=>{
+      ctx.fillText(l.emoji,l.x,l.y);
+      l.y+=l.d; l.x+=Math.sin(l.y/40)*0.6;
+      if(l.y>H+30){l.y=-30;l.x=Math.random()*W;}
+    });
+    if(errorPage.classList.contains('active')) requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+/* ====== Exit 404 on "Try Again" ====== */
+document.querySelector('.btn-return').addEventListener('click', e=>{
+  e.preventDefault();
+  hide404();
+  location.hash='#home';
+});
+</script>
+
+</body>
+</html>
